@@ -27,10 +27,15 @@ fn main() {
 // TODO: ikisi de yazdirilsin. Iki farkli cozum bulun, hangisi daha ucuz?
 // ---------------------------------------------------------------------------
 fn dojo_1() {
+    // println!("-- dojo 1 --");
+    // let s1 = String::from("merhaba");
+    // let s2 = s1.clone();
+    // println!("{} {}", s1, s2);
+
     println!("-- dojo 1 --");
     let s1 = String::from("merhaba");
-    let s2 = s1;
-    println!("{}", s2);
+    let s2 = &s1;
+    println!("{} {}", s1, s2);
 }
 
 // ---------------------------------------------------------------------------
@@ -44,10 +49,11 @@ fn dojo_1() {
 fn dojo_2() {
     println!("-- dojo 2 --");
     let ad = String::from("Ayse");
-    selamla(ad);
+    selamla(&ad);
+    selamla(&ad);
 }
 
-fn selamla(a: String) {
+fn selamla(a: &String) {
     println!("merhaba {}", a);
 }
 
@@ -60,7 +66,8 @@ fn selamla(a: String) {
 // ---------------------------------------------------------------------------
 fn dojo_3() {
     println!("-- dojo 3 --");
-    let v = vec![1, 2, 3];
+    let v = &mut vec![1, 2, 3];
+    v.push(4);
     println!("{:?}", v);
 }
 
@@ -94,10 +101,17 @@ fn dojo_4() {
 // Ikisi ayni sey mi? Hangisi her durumda calisir?
 // ---------------------------------------------------------------------------
 fn dojo_5() {
+    // println!("-- dojo 5 --");
+    // let mut v = vec![1, 2, 3];
+    // let ilk = v[0].clone();
+    // v.push(4);
+    // println!("{}", ilk);
+
     println!("-- dojo 5 --");
     let mut v = vec![1, 2, 3];
+    let ilk = &v[0];
+    println!("{}", ilk);
     v.push(4);
-    println!("{:?}", v);
 }
 
 // ---------------------------------------------------------------------------
@@ -111,7 +125,12 @@ fn dojo_5() {
 // ---------------------------------------------------------------------------
 fn dojo_6() {
     println!("-- dojo 6 --");
-    println!("(bos)");
+    println!("{}", ilk_kelime());
+}
+
+fn ilk_kelime() -> String {
+    let s = String::from("merhaba dunya");
+    s
 }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +145,9 @@ fn dojo_6() {
 fn dojo_7() {
     println!("-- dojo 7 --");
     let kayit = (String::from("Ayse"), String::from("Ankara"));
-    println!("{} {}", kayit.0, kayit.1);
+    let ad = &kayit.0;
+    println!("{} {:?}", ad, kayit);
+    println!("{:?}", kayit.1);
 }
 
 // ---------------------------------------------------------------------------
@@ -141,8 +162,24 @@ fn dojo_7() {
 fn dojo_8() {
     println!("-- dojo 8 --");
     let mut s = String::from("merhaba");
-    println!("{}", s.len());
-    s.push_str(" dunya");
+
+    println!("{}", uzunluk(&s));
+
+    ekleme(&mut s, " dunya");
     println!("{}", s);
-    println!("{}", s.to_uppercase());
+
+    println!("{}", buyuk_harf(&s));
+    println!("{}", s);
+}
+
+fn uzunluk(a: &String) -> usize {
+    a.len()
+}
+
+fn ekleme(a: &mut String, b: &'static str) -> () {
+    a.push_str(b);
+}
+
+fn buyuk_harf(a: &String) -> String {
+    a.to_uppercase()
 }
