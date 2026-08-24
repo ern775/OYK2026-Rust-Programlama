@@ -7,3 +7,16 @@ Cargo.lock.bak
 .~lock.*#
 .DS_Store
 *.swp
+
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+**/target

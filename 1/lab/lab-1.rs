@@ -8,22 +8,22 @@
 
 fn main() {
     lab_1_yildizlar();
-    lab_2_sicaklik_tablosu();
-    lab_3_carpim_tablosu();
+    // lab_2_sicaklik_tablosu();
+    // lab_3_carpim_tablosu();
 }
 
 // ---------------------------------------------------------------------------
 // LAB 1 - Yildiz desenleri
 // ---------------------------------------------------------------------------
 fn lab_1_yildizlar() {
-    println!("-- lab 1 --");
+    println!("---- lab 1 ----");
+    println!();
 
-    // ORNEK: sol ucgen (n = 5)
+    println!("-- sol ucgen --");
+    // ORNEK: sol ucgen
     // *
     // **
     // ***
-    // ****
-    // *****
     for i in 1..=5 {
         for _ in 0..i {
             print!("*");
@@ -32,13 +32,22 @@ fn lab_1_yildizlar() {
     }
     println!();
 
+    println!("-- ters ucgen --");
     // TODO 1a: ters ucgen
     // *****
     // ****
     // ***
     // **
     // *
+    for i in 1..=5 {
+        for _ in i..=5 {
+            print!("*");
+        }
+        println!();
+    }
+    println!();
 
+    println!("-- piramit --");
     // TODO 1b: piramit
     //     *
     //    ***
@@ -46,7 +55,21 @@ fn lab_1_yildizlar() {
     //  *******
     // *********
     // ipucu: once bosluk sonra yildiz; bosluk 5-i, yildiz 2*i-1
+    for i in 1..=5 {
+        for _ in 1..=5 - i {
+            print!(" ");
+        }
+        for _ in 1..=2 * i - 1 {
+            print!("*");
+        }
+        for _ in 1..=5 - i {
+            print!(" ");
+        }
+        println!();
+    }
+    println!();
 
+    println!("-- kare --");
     // TODO 1c: ici bos kare (n = 5)
     // *****
     // *   *
@@ -54,6 +77,22 @@ fn lab_1_yildizlar() {
     // *   *
     // *****
     // ipucu: ilk/son satir ya da ilk/son sutun ise yildiz, degilse bosluk
+    for i in 0..=4 {
+        for j in 0..=4 {
+            if i == 0 || i == 4 || j == 0 || j == 4 {
+                print!("*");
+            } else {
+                print!(" ");
+            }
+        }
+        println!();
+    }
+    println!();
+
+    let s1 = String::from("Merhaba");
+    let s2 = s1.clone();
+    println!("s1: {}", s1);
+    let s2 = s1;
 }
 
 // ---------------------------------------------------------------------------
