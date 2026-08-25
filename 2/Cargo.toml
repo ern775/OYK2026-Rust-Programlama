@@ -4,3 +4,19 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+
+[[bin]]
+name = "ders2"
+path = "src/main.rs"
+
+[[bin]]
+name = "lab2"
+path = "lab/lab-2.rs"
+
+[[bin]]
+name = "notlar-ders1"
+path = "notlar/Ders1/main.rs"
+
+[[bin]]
+name = "notlar-ders2"
+path = "notlar/Ders2/main.rs"

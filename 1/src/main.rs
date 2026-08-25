@@ -34,11 +34,11 @@ fn main() {
     println!("s = {}", s);
 
     let i8_var = 126i8;
-    let u16: u16 = 450;
+    // let u16: u16 = 450;
     let u16: f64 = 450.0;
     println!("i8_var = {}", i8_var);
     println!("u16 = {}", u16);
 
-    let mut content = String::from("OYK");
+    let content = String::from("OYK");
     println!("{:?}", content);
 }

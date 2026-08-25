@@ -8,8 +8,8 @@
 
 fn main() {
     lab_1_yildizlar();
-    // lab_2_sicaklik_tablosu();
-    // lab_3_carpim_tablosu();
+    lab_2_sicaklik_tablosu();
+    lab_3_carpim_tablosu();
 }
 
 // ---------------------------------------------------------------------------
@@ -90,9 +90,9 @@ fn lab_1_yildizlar() {
     println!();
 
     let s1 = String::from("Merhaba");
-    let s2 = s1.clone();
+    // let s2 = s1.clone();
     println!("s1: {}", s1);
-    let s2 = s1;
+    // let s2 = s1;
 }
 
 // ---------------------------------------------------------------------------

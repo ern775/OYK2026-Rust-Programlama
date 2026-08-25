@@ -41,7 +41,10 @@ fn main() {
     let i64_var: i64 = 9_000_000_000;
     let u128_var: u128 = 45;
     let idx: usize = 8;
-    println!("{} {} {} {} {} {} {}", i8_var, u8_var, u16_var, i32_var, i64_var, u128_var, idx);
+    println!(
+        "{} {} {} {} {} {} {}",
+        i8_var, u8_var, u16_var, i32_var, i64_var, u128_var, idx
+    );
     // let k: u8 = 300;                 // literal out of range
 
     println!("{} {}", i32::MIN, i32::MAX);
@@ -66,9 +69,13 @@ fn main() {
     println!("{}", 0.1 + 0.2);
     println!("{}", 0.1 + 0.2 == 0.3);
 
-    println!("{} {} {} {}",
-        std::mem::size_of::<u8>(), std::mem::size_of::<i32>(),
-        std::mem::size_of::<char>(), std::mem::size_of::<f64>());
+    println!(
+        "{} {} {} {}",
+        std::mem::size_of::<u8>(),
+        std::mem::size_of::<i32>(),
+        std::mem::size_of::<char>(),
+        std::mem::size_of::<f64>()
+    );
 
     // ayni kod dev'de panic, release'te sarar - iki profille de calistirin
     let t: u8 = 255;

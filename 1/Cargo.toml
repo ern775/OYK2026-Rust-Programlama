@@ -5,3 +5,23 @@ edition = "2024"
 
 [dependencies]
 chrono = "0.4.45"
+
+[[bin]]
+name = "ders1"
+path = "src/main.rs"
+
+[[bin]]
+name = "lab1"
+path = "lab/lab-1.rs"
+
+[[bin]]
+name = "notlar-ders3"
+path = "notlar/Ders3/main.rs"
+
+[[bin]]
+name = "notlar-ders4"
+path = "notlar/Ders4/main.rs"
+
+[[bin]]
+name = "notlar-ders5"
+path = "notlar/Ders5/main.rs"
