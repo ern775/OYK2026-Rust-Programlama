@@ -182,10 +182,10 @@ fn main() {
     println!("sahipli hala bizde: {:?}", sahipli);
 
     match sahipli {
-        Some(s) => println!("bu sefer tasindi: {}", s),
+        Some(ref s) => println!("bu sefer tasindi: {}", s),
         None => println!("bos"),
     }
-    // println!("{:?}", sahipli);       // E0382 - tasindi
+    println!("{:?}", sahipli);       // E0382 - tasindi
 
     // match bir IFADEDIR - tum kollarin tipi ayni olmali
     let sure = match TrafficLight::Red {

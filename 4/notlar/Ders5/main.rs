@@ -47,7 +47,7 @@ fn main() {
     // v -> into_iter() -> T, koleksiyon TUKENIR
     let t = vec![String::from("a"), String::from("b")];
     for s in t {
-        print!("{} ", s);               // s: String, sahipligi bizde
+        print!("{} ", s); // s: String, sahipligi bizde
     }
     println!();
     // println!("{:?}", t);             // E0382 - t tasindi
@@ -65,8 +65,9 @@ fn main() {
     let mut toplam = 0;
     let mut buyuk = 0;
     for x in &sayilar {
-        toplam += x;                    // otomatik cozuluyor
-        if *x > 10 {                    // karsilastirmada * ile daha okunakli
+        toplam += x; // otomatik cozuluyor
+        if *x > 10 {
+            // karsilastirmada * ile daha okunakli
             buyuk += 1;
         }
     }
@@ -94,11 +95,11 @@ fn main() {
     // --- metinde enumerate vs char_indices ---
     let kelime = "gül";
     for (i, k) in kelime.chars().enumerate() {
-        print!("({},{}) ", i, k);       // kacinci HARF
+        print!("({},{}) ", i, k); // kacinci HARF
     }
     println!();
     for (i, k) in kelime.char_indices() {
-        print!("({},{}) ", i, k);       // kacinci BAYT
+        print!("({},{}) ", i, k); // kacinci BAYT
     }
     println!();
 
@@ -114,9 +115,18 @@ fn main() {
 
     // --- kendi tiplerimizde gezinme: struct ve enum ---
     let mut gezegenler = vec![
-        Planet { name: String::from("Dunya"), moons: 1 },
-        Planet { name: String::from("Mars"), moons: 2 },
-        Planet { name: String::from("Neptun"), moons: 14 },
+        Planet {
+            name: String::from("Dunya"),
+            moons: 1,
+        },
+        Planet {
+            name: String::from("Mars"),
+            moons: 2,
+        },
+        Planet {
+            name: String::from("Neptun"),
+            moons: 14,
+        },
     ];
 
     // okumak
@@ -134,7 +144,7 @@ fn main() {
     // tuketmek - String alanini disari TASIMAK icin tek yol
     let mut adlar = Vec::new();
     for g in gezegenler {
-        adlar.push(g.name);               // sahipligi devraldik, kopya yok
+        adlar.push(g.name); // sahipligi devraldik, kopya yok
     }
     // println!("{:?}", gezegenler);    // E0382 - liste tukendi
     println!("{:?}", adlar);
@@ -156,7 +166,7 @@ fn main() {
     harita.insert("armut", 5);
 
     let mut cift: Vec<(&&str, &i32)> = harita.iter().collect();
-    cift.sort();                        // HashMap sirasiz, cikti icin sirala
+    cift.sort(); // HashMap sirasiz, cikti icin sirala
     println!("{:?}", cift);
 
     for deger in harita.values_mut() {

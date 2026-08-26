@@ -7,7 +7,7 @@
 // Iskelet kod: TODO'lar doldurulana kadar kullanilmayan degisken/import uyarilari normal.
 #![allow(unused)]
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 const METIN: &str = "Rust ogrenmek zor ama Rust yazmak keyifli
 Rust guvenli ve Rust hizli
@@ -36,17 +36,49 @@ fn lab_1_frekans() {
 
     // TODO 1a: HashMap<&str, u32> ile her kelimenin frekansini sayin
     //          ipucu: *frekans.entry(kelime).or_insert(0) += 1;
+    let mut sayim: HashMap<&str, i32> = HashMap::new();
+    for kelime in METIN.split_whitespace() {
+        *sayim.entry(kelime).or_insert(0) += 1;
+    }
+    for a in &sayim {
+        println!("{:?}", &a);
+    }
+    println!();
 
     // TODO 1b: sonucu frekansa gore AZALAN siralayip yazdirin
     //          ipucu: Vec<(&str, u32)>'e toplayin, sonra sort_by
     //                 v.sort_by(|a, b| b.1.cmp(&a.1));
     //          not: sort_by'a verilen |a, b| ... bir closure.
     //               Simdilik bu kalibi oldugu gibi kullanin.
+    let mut sira: Vec<(&str, i32)> = vec![];
+    for (&kelime, &sayi) in &sayim {
+        sira.push((kelime, sayi));
+    }
+    sira.sort_by(|a, b| b.1.cmp(&a.1));
+    for i in &sira {
+        println!("{:?}", &i);
+    }
+    println!();
 
-    // TODO 1c: sadece 1 kereden fazla gecen kelimeleri yazdirin
+    // TODO 1c: sadece 1 kereden fazla gecen kelimeleri
+    for i in &sira {
+        if i.1 > 1 {
+            println!("{:?}", &i);
+        }
+    }
+    println!();
 
     // TODO 1d: buyuk/kucuk harf duyarsiz sayin
     //          "Rust" ve "rust" ayni kelime sayilsin
+    let mut sayim: HashMap<&str, i32> = HashMap::new();
+    let metin_lower = METIN.to_lowercase();
+    for kelime in metin_lower.split_whitespace() {
+        *sayim.entry(kelime).or_insert(0) += 1;
+    }
+    for a in &sayim {
+        println!("{:?}", &a);
+    }
+    println!();
 }
 
 // ---------------------------------------------------------------------------
@@ -60,7 +92,17 @@ fn lab_2_istatistik() {
     println!("{} satir", METIN.lines().count());
 
     // TODO 2a: toplam kelime sayisi
+    println!("{} kelime", METIN.split_whitespace().count());
     // TODO 2b: farkli (tekrarsiz) kelime sayisi   -> HashSet
+    let mut count = 0;
+    let mut kume = HashSet::new();
+    for kelime in METIN.split_whitespace() {
+        if kume.insert(kelime) {
+            count += 1;
+        }
+    }
+    println!("tekrarsiz: {}", count);
+
     // TODO 2c: en uzun kelime ve uzunlugu
     // TODO 2d: ortalama kelime uzunlugu (f64)
     // TODO 2e: her satirin kac kelime icerdigini yazdirin
