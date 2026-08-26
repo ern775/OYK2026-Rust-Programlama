@@ -63,6 +63,22 @@ name = "day2"
 version = "0.1.0"
 
 [[package]]
+name = "day3"
+version = "0.1.0"
+
+[[package]]
+name = "day4"
+version = "0.1.0"
+
+[[package]]
+name = "day5"
+version = "0.1.0"
+
+[[package]]
+name = "ders3"
+version = "0.1.0"
+
+[[package]]
 name = "find-msvc-tools"
 version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -162,14 +178,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 
 [[package]]
-name = "own"
-version = "0.1.0"
-
-[[package]]
-name = "own4"
-version = "0.1.0"
-
-[[package]]
 name = "pin-project-lite"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -221,6 +229,10 @@ dependencies = [
  "quote",
  "unicode-ident",
 ]
+
+[[package]]
+name = "testoyk"
+version = "0.1.0"
 
 [[package]]
 name = "unicode-ident"

@@ -71,9 +71,9 @@ impl Planet {
     }
 }
 
-// fn yut_gezegen(p: Planet) {
-//     println!("yutuldu: {}", p.name);
-// }
+fn yut_gezegen(p: Planet) {
+    println!("yutuldu: {}", p.name);
+}
 
 fn print_altitude(m: &Meters) {
     println!("irtifa: {} metre", m.0);

@@ -102,12 +102,50 @@ fn lab_2_istatistik() {
         }
     }
     println!("tekrarsiz: {}", count);
-
     // TODO 2c: en uzun kelime ve uzunlugu
+    let mut en_uzun: &str = "";
+    for kelime in METIN.split_whitespace() {
+        if kelime.chars().count() > en_uzun.chars().count() {
+            en_uzun = kelime;
+        }
+    }
+    println!(
+        "en uzun kelime: {} uzunlugu: {}",
+        en_uzun,
+        en_uzun.chars().count()
+    );
     // TODO 2d: ortalama kelime uzunlugu (f64)
+    let mut total: f64 = 0.0;
+    let mut count: f64 = 0.0;
+    for kelime in METIN.split_whitespace() {
+        total += kelime.chars().count() as f64;
+        count += 1.0;
+    }
+    println!("ortalama uzunluk: {}", total / count);
     // TODO 2e: her satirin kac kelime icerdigini yazdirin
+    let mut satir_count = 0;
+    for satir in METIN.lines() {
+        satir_count += 1;
+        let mut count = 0;
+        for kelime in satir.split_whitespace() {
+            count += 1;
+        }
+        println!("{}. satir: {} kelime", satir_count, count);
+    }
     // TODO 2f: harf frekansi - hangi harf kac kez geciyor
     //          bosluk ve satir sonu sayilmasin
+    let mut sayim: HashMap<char, i32> = HashMap::new();
+    for satir in METIN.to_lowercase().lines() {
+        for kelime in satir.split_whitespace() {
+            for harf in kelime.chars() {
+                *sayim.entry(harf).or_insert(0) += 1;
+            }
+        }
+    }
+    for a in &sayim {
+        println!("{:?}", &a);
+    }
+    println!();
 }
 
 // ---------------------------------------------------------------------------
