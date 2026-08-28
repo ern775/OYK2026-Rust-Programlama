@@ -24,12 +24,18 @@ struct Lead {
 
 impl Lead {
     fn new(text: &str) -> Lead {
-        Lead { text: text.to_string(), next: None }
+        Lead {
+            text: text.to_string(),
+            next: None,
+        }
     }
 
     // Bu ipucunu zincirin BASINA koyar.
     fn then(self, sonraki: Lead) -> Lead {
-        Lead { text: self.text, next: Some(Box::new(sonraki)) }
+        Lead {
+            text: self.text,
+            next: Some(Box::new(sonraki)),
+        }
     }
 
     fn chain(&self) -> String {
@@ -68,12 +74,15 @@ fn duyur(metin: &str) -> String {
 // ===============================================================
 struct CaseFile {
     code: String,
-    notes: RefCell<Vec<String>>,     // &self ile degisebilsin diye RefCell
+    notes: RefCell<Vec<String>>, // &self ile degisebilsin diye RefCell
 }
 
 impl CaseFile {
     fn new(code: &str) -> CaseFile {
-        CaseFile { code: code.to_string(), notes: RefCell::new(Vec::new()) }
+        CaseFile {
+            code: code.to_string(),
+            notes: RefCell::new(Vec::new()),
+        }
     }
 
     // DIKKAT: &self, &mut self DEGIL. Ic mutasyon budur.
@@ -97,12 +106,12 @@ impl Drop for CaseFile {
 // ===============================================================
 struct Case {
     code: String,
-    team: RefCell<Vec<Rc<Detective>>>,     // asagi dogru: Rc (sahiplik)
+    team: RefCell<Vec<Rc<Detective>>>, // asagi dogru: Rc (sahiplik)
 }
 
 struct Detective {
     name: String,
-    case: RefCell<Weak<Case>>,             // yukari dogru: Weak (sahiplik yok)
+    case: RefCell<Weak<Case>>, // yukari dogru: Weak (sahiplik yok)
 }
 
 impl Drop for Case {
@@ -148,16 +157,20 @@ fn main() {
 
     println!("== 2) Box: boyut ==");
     println!("  [u8; 4096]         {:>5} bayt", size_of::<[u8; 4096]>());
-    println!("  Box<[u8; 4096]>    {:>5} bayt   <- icindeki ne olursa olsun bir pointer",
-        size_of::<Box<[u8; 4096]>>());
-    println!("  Option<Box<Lead>>  {:>5} bayt   <- Option bedava (Gun 4: niche)",
-        size_of::<Option<Box<Lead>>>());
+    println!(
+        "  Box<[u8; 4096]>    {:>5} bayt   <- icindeki ne olursa olsun bir pointer",
+        size_of::<Box<[u8; 4096]>>()
+    );
+    println!(
+        "  Option<Box<[u8; 4096]>>  {:>5} bayt   <- Option bedava (Gun 4: niche)",
+        size_of::<Option<Box<[u8; 4096]>>>()
+    );
 
     println!("== 3) Deref: kutuyu acmak ==");
     let kutu = MyBox::new(String::from("dosya 47 acildi"));
-    println!("  *kutu uzunlugu : {}", (*kutu).len());
-    println!("  {}", duyur(&kutu));                     // &MyBox<String> -> &String -> &str
-    println!("  {}", duyur(&String::from("dosya 48 acildi")));   // &String -> &str
+    println!("  *kutu uzunlugu : {}", kutu.len());
+    println!("  {}", duyur(&kutu)); // &MyBox<String> -> &String -> &str
+    println!("  {}", duyur(&String::from("dosya 48 acildi"))); // &String -> &str
     println!("  Gun 3'te 'parametrede &str al' demistik; sebebi bu zincir.");
 
     println!("== 4) Drop: kapsam bitince, TERS sirada ==");
@@ -170,11 +183,17 @@ fn main() {
     println!("== 5) Rc: paylasilan sahiplik ==");
     let dosya = Rc::new(CaseFile::new("KRG-12"));
     println!("  sayac: {}", Rc::strong_count(&dosya));
-    let alvarez = Rc::clone(&dosya);                    // veri kopyalanmiyor, sayac artiyor
-    println!("  sayac: {}   <- Alvarez de bakiyor", Rc::strong_count(&dosya));
+    let alvarez = Rc::clone(&dosya); // veri kopyalanmiyor, sayac artiyor
+    println!(
+        "  sayac: {}   <- Alvarez de bakiyor",
+        Rc::strong_count(&dosya)
+    );
     {
         let _gece_vardiyasi = Rc::clone(&dosya);
-        println!("  sayac: {}   <- gece vardiyasi da acti", Rc::strong_count(&dosya));
+        println!(
+            "  sayac: {}   <- gece vardiyasi da acti",
+            Rc::strong_count(&dosya)
+        );
     }
     println!("  sayac: {}   <- vardiya bitti", Rc::strong_count(&dosya));
 
@@ -188,7 +207,7 @@ fn main() {
     println!("== 6b) RefCell kurali CALISMA zamaninda ==");
     let hucre = RefCell::new(5);
     *hucre.borrow_mut() += 10;
-    let ilk = hucre.borrow_mut();                       // tek yazici
+    let ilk = hucre.borrow_mut(); // tek yazici
     match hucre.try_borrow_mut() {
         Ok(_) => println!("  ikinci borrow_mut kabul edildi"),
         Err(_) => println!("  ikinci borrow_mut REDDEDILDI (already borrowed)"),
@@ -197,22 +216,25 @@ fn main() {
     println!("  ilki birakildi, deger: {}", hucre.borrow());
     println!("  borrow_mut yazsaydik PANIC ederdi. &mut olsaydi E0499 - derleme zamaninda.");
 
-    // Rc sınırsız sayıda sahibin aynı veriyi paylaşmasını ($N$ sahip), 
-    // RefCell ise bu sahiplerden aynı anda yalnızca birinin yazabilmesini (en fazla 1 aktif borrow_mut) denetler. 
+    // Rc sınırsız sayıda sahibin aynı veriyi paylaşmasını ($N$ sahip),
+    // RefCell ise bu sahiplerden aynı anda yalnızca birinin yazabilmesini (en fazla 1 aktif borrow_mut) denetler.
     // İki sayaç birbirinden tamamen bağımsızdır.
 
     println!("== 6c) Cell: RefCell'in ucuz kardesi ==");
     let ziyaret = Cell::new(0u32);
     ziyaret.set(ziyaret.get() + 1);
     ziyaret.set(ziyaret.get() + 1);
-    println!("  sayac {} | Cell deger kopyalar, RefCell referans verir", ziyaret.get());
-    // Aynen öyle. Primitive (i32, bool, f64 vb.) veya küçük Copy tipler için Cell, 
+    println!(
+        "  sayac {} | Cell deger kopyalar, RefCell referans verir",
+        ziyaret.get()
+    );
+    // Aynen öyle. Primitive (i32, bool, f64 vb.) veya küçük Copy tipler için Cell,
     // Vec veya String gibi referans (&/&mut) ile çalışılması zorunlu tipler için RefCell tercih edilir.
 
     println!("== 6d) sayac sifira inince drop ==");
     drop(alvarez);
     println!("  Alvarez birakti, sayac: {}", Rc::strong_count(&dosya));
-    drop(dosya);                                        // son sahip de gitti
+    drop(dosya); // son sahip de gitti
 
     println!("== 7) Weak: dongu kurmadan geri baglanti ==");
     {
@@ -225,8 +247,11 @@ fn main() {
             case: RefCell::new(Rc::downgrade(&dava)),
         });
         dava.team.borrow_mut().push(Rc::clone(&dedektif));
-        println!("  dava sayaci: strong {} / weak {}",
-            Rc::strong_count(&dava), Rc::weak_count(&dava));
+        println!(
+            "  dava sayaci: strong {} / weak {}",
+            Rc::strong_count(&dava),
+            Rc::weak_count(&dava)
+        );
         // Weak sahiplenmez -> hedef dusmus olabilir -> upgrade() Option doner
         // borrow() gecici bir Ref uretir; once bir degiskene alalim.
         let baglanti = dedektif.case.borrow().upgrade();
@@ -247,13 +272,16 @@ fn main() {
             name: String::from("Kaya"),
             case: RefCell::new(None),
         });
-        dava.team.borrow_mut().push(Rc::clone(&dedektif));      // asagi: Rc
-        *dedektif.case.borrow_mut() = Some(Rc::clone(&dava));   // yukari: Rc  <- DONGU
-        println!("  sayaclar: dava {} / dedektif {}",
-            Rc::strong_count(&dava), Rc::strong_count(&dedektif));
+        dava.team.borrow_mut().push(Rc::clone(&dedektif)); // asagi: Rc
+        *dedektif.case.borrow_mut() = Some(Rc::clone(&dava)); // yukari: Rc  <- DONGU
+        println!(
+            "  sayaclar: dava {} / dedektif {}",
+            Rc::strong_count(&dava),
+            Rc::strong_count(&dedektif)
+        );
     }
     println!("  blok bitti - HIC DROP SATIRI YOK. Ikisi birbirini tutuyor: bellek sizdi.");
     println!("  Fark tek kelime: Weak yerine Rc.");
-    // Weak yukarıya sahiplik kurmadığı için sayaçlar kilitlenmez, 
+    // Weak yukarıya sahiplik kurmadığı için sayaçlar kilitlenmez,
     // ana nesne (parent) yok olunca alt nesne (child) zincirleme olarak temizlenir.
 }

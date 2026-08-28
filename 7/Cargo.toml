@@ -1,5 +1,5 @@
 [package]
-name = "day6"
+name = "day7"
 version = "0.1.0"
 edition = "2024"
 
@@ -26,9 +26,5 @@ name = "ders5"
 path = "notlar/Ders5/main.rs"
 
 [[bin]]
-name = "lab6"
-path = "lab/lab-6.rs"
-
-[[bin]]
-name = "own"
-path = "src/main.rs"
+name = "lab7"
+path = "lab/lab-7.rs"

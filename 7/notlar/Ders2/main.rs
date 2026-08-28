@@ -106,113 +106,133 @@ impl Casebook {
 // ---------------------------------------------------------------
 fn file_away(s: String) {
     println!("  arsive kaldirildi: {}", s);
-}   // s burada dusuyor - omru fonksiyonun sonunda bitti
+} // s burada dusuyor - omru fonksiyonun sonunda bitti
 
+fn longest_int<'a, 'b, 'c>(x: &'a i32, y: &'b i32) -> &'c i32
+where
+    'a: 'c,
+    'b: 'c,
+{
+    if x >= y { x } else { y }
+}
 
 fn main() {
-    println!("-- 1) somut omur --");
-    let statement = String::from("kirmizi bir araba hizla gecti");
-    let slice = &statement[..7];              // omru statement'a bagli
-    // statement.push_str("!!!");
-    println!("  dilim: '{}'", slice);
-    println!("  kaynak yerinde: '{}'", statement);
+    longest_int(&5, &6);
+    // println!("-- 1) somut omur --");
+    // let statement = String::from("kirmizi bir araba hizla gecti");
+    // let slice = &statement[..7]; // omru statement'a bagli
+    // // statement.push_str("!!!");
+    // println!("  dilim: '{}'", slice);
+    // println!("  kaynak yerinde: '{}'", statement);
 
-    // Copy tipleri: Move olmaz, i'nin omru bitmez
-    let i = 5;
-    let j = i; // i32 Copy trait'ini uygular, deger kopyalanir
-    println!("  i: {i}, j: {j}");
+    // // Copy tipleri: Move olmaz, i'nin omru bitmez
+    // let i = 5;
+    // let j = i; // i32 Copy trait'ini uygular, deger kopyalanir
+    // println!("  i: {i}, j: {j}");
 
-    // Ic kapsam: DEGERI disari tasimak serbest
-    let outer;
-    {
-        let inner = String::from("otoparkta bir golge vardi");
-        outer = inner.len();                   // uzunluk kopyalandi
-    }
-    println!("  ic kapsamdan tasinan uzunluk: {}", outer);
-
-    // REFERANSI tasimak serbest degil - asagiyi yorumdan cikarin:
-    // let outer_ref;
+    // // Ic kapsam: DEGERI disari tasimak serbest
+    // let outer;
     // {
     //     let inner = String::from("otoparkta bir golge vardi");
-    //     outer_ref = &inner;
+    //     outer = inner.len(); // uzunluk kopyalandi
     // }
-    // println!("{}", outer_ref);
-    //   E0597: inner blok bitince dustu, outer_ref onu gosteremez.
+    // println!("  ic kapsamdan tasinan uzunluk: {}", outer);
 
-    println!("-- 1b) omru bitiren uc yol --");
-    // (a) kapsam bitti
-    {
-        let temp = String::from("gecici tutanak");
-        println!("  kapsam icinde: {}", temp);
-    }   // temp dustu
+    // // REFERANSI tasimak serbest degil - asagiyi yorumdan cikarin:
+    // // let outer_ref;
+    // // {
+    // //     let inner = String::from("otoparkta bir golge vardi");
+    // //     outer_ref = &inner;
+    // // }
+    // // println!("{}", outer_ref);
+    // //   E0597: inner blok bitince dustu, outer_ref onu gosteremez.
 
-    // (b) baska bir binding'e TASINDI
-    let original = String::from("ilk tutanak");
-    let moved = original;
-    println!("  tasindi: {}", moved);
-    // println!("{}", original);
-    //   E0382: borrow of moved value - original'in omru tasima satirinda bitti
+    // println!("-- 1b) omru bitiren uc yol --");
+    // // (a) kapsam bitti
+    // {
+    //     let temp = String::from("gecici tutanak");
+    //     println!("  kapsam icinde: {}", temp);
+    // } // temp dustu
 
-    // (c) fonksiyona DEGERLE gecildi
-    let report = String::from("gunluk rapor");
-    file_away(report);
-    // println!("{}", report);
-    //   E0382: omru cagri satirinda bitti, fonksiyon icinde dustu
+    // // (b) baska bir binding'e TASINDI
+    // let original = String::from("ilk tutanak");
+    // let moved = original;
+    // println!("  tasindi: {}", moved);
+    // // println!("{}", original);
+    // //   E0382: borrow of moved value - original'in omru tasima satirinda bitti
 
-    println!("-- 2) sarkan referans yerine sahiplik --");
-    println!("  {}", latest_note()); // dangling referans zaten drop edilen bir yere işaret ediyor.
+    // // (c) fonksiyona DEGERLE gecildi
+    // let report = String::from("gunluk rapor");
+    // file_away(report);
+    // // println!("{}", report);
+    // //   E0382: omru cagri satirinda bitti, fonksiyon icinde dustu
 
-    println!("-- 3) iki girdi, tek donus --");
-    let a = String::from("tanik A: araba maviydi");
-    let b = String::from("tanik B: kirmizi");
-    println!("  uzun olan : {}", longer_statement(&a, &b));
-    println!("  tercihli  : {}", preferred(&a, &b));
+    // println!("-- 2) sarkan referans yerine sahiplik --");
+    // println!("  {}", latest_note()); // dangling referans zaten drop edilen bir yere işaret ediyor.
 
-    // Omur KISITI burada goruluyor:
-    let long_lived = String::from("tanik A: araba maviydi");
-    let winner;
-    {
-        let short_lived = String::from("tanik B: kirmizi");
-        winner = longer_statement(&long_lived, &short_lived);
-        println!("  blok icinde kullanmak serbest: {}", winner);
-    }
-    // println!("{}", winner);
-    //   E0597: 'a KISA olana esitlendi; blok bitince winner de gecersiz.
+    // println!("-- 3) iki girdi, tek donus --");
+    // let a = String::from("tanik A: araba maviydi");
+    // let b = String::from("tanik B: kirmizi");
+    // println!("  uzun olan : {}", longer_statement(&a, &b));
+    // println!("  tercihli  : {}", preferred(&a, &b));
 
-    println!("-- 4) elision: uc kural --");
-    let report = String::from("plaka kismen okunabiliyor");
-    let other = String::from("kamyon lacivertti mi");
+    // // Omur KISITI burada goruluyor:
+    // let long_lived = String::from("tanik A: araba maviydi");
+    // let winner;
+    // {
+    //     let short_lived = String::from("tanik B: kirmizi");
+    //     winner = longer_statement(&long_lived, &short_lived);
+    //     println!("  blok icinde kullanmak serbest: {}", winner);
+    // }
+    // // println!("{}", winner);
+    // //   E0597: 'a KISA olana esitlendi; blok bitince winner de gecersiz.
 
-    // Kural 1: referans donmuyor
-    println!("  kural 1 | ayni uzunluk mu : {} = {}",
-        same_length(&report, &other), same_length_explicit(&report, &other));
+    // println!("-- 4) elision: uc kural --");
+    // let report = String::from("plaka kismen okunabiliyor");
+    // let other = String::from("kamyon lacivertti mi");
 
-    // Kural 2: tek girdi -> cikisa o omur
-    println!("  kural 2 | ilk kelime      : {} = {}",
-        first_word(&report), first_word_explicit(&report));
+    // // Kural 1: referans donmuyor
+    // println!(
+    //     "  kural 1 | ayni uzunluk mu : {} = {}",
+    //     same_length(&report, &other),
+    //     same_length_explicit(&report, &other)
+    // );
 
-    // Kural 3: &self -> cikisa self'in omru
-    let defter = Casebook {
-        title: String::from("KRG-12 kayit defteri"),
-        entries: vec![
-            String::from("23:38 kamera kesildi"),
-            String::from("23:40 tanik beyani"),
-        ],
-    };
-    println!("  kural 3 | baslik          : {} = {}",
-        defter.title(), defter.title_explicit());
-    {
-        // keyword KISA yasiyor; donen referans self'e bagli oldugu icin sorun yok
-        let keyword = String::from("tanik");
-        println!("  kural 3 | arama           : {:?}", defter.find(&keyword));
-    }
-    println!("  kural 3 | defter yasiyor  : {} kayit", defter.entries.len());
+    // // Kural 2: tek girdi -> cikisa o omur
+    // println!(
+    //     "  kural 2 | ilk kelime      : {} = {}",
+    //     first_word(&report),
+    //     first_word_explicit(&report)
+    // );
 
-    println!("-- 5) NLL: omur son KULLANIMDA biter --");
-    let mut leads = vec![String::from("otopark"), String::from("plaka")];
-    let peek = &leads[0];                      // okuma odunci
-    println!("  ilk ipucu: {}", peek);         // peek'in son kullanimi burasi
-    leads.push(String::from("bekci"));         // artik yazma odunci alinabiliyor
-    println!("  {} ipucu var", leads.len());
-    // peek'i asagida kullansaydik E0502 alirdik: omurler cakisirdi.
+    // // Kural 3: &self -> cikisa self'in omru
+    // let defter = Casebook {
+    //     title: String::from("KRG-12 kayit defteri"),
+    //     entries: vec![
+    //         String::from("23:38 kamera kesildi"),
+    //         String::from("23:40 tanik beyani"),
+    //     ],
+    // };
+    // println!(
+    //     "  kural 3 | baslik          : {} = {}",
+    //     defter.title(),
+    //     defter.title_explicit()
+    // );
+    // {
+    //     // keyword KISA yasiyor; donen referans self'e bagli oldugu icin sorun yok
+    //     let keyword = String::from("tanik");
+    //     println!("  kural 3 | arama           : {:?}", defter.find(&keyword));
+    // }
+    // println!(
+    //     "  kural 3 | defter yasiyor  : {} kayit",
+    //     defter.entries.len()
+    // );
+
+    // println!("-- 5) NLL: omur son KULLANIMDA biter --");
+    // let mut leads = vec![String::from("otopark"), String::from("plaka")];
+    // let peek = &leads[0]; // okuma odunci
+    // println!("  ilk ipucu: {}", peek); // peek'in son kullanimi burasi
+    // leads.push(String::from("bekci")); // artik yazma odunci alinabiliyor
+    // println!("  {} ipucu var", leads.len());
+    // // peek'i asagida kullansaydik E0502 alirdik: omurler cakisirdi.
 }
