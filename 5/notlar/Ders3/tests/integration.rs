@@ -11,7 +11,10 @@ fn public_api_is_flat() {
 
 #[test]
 fn report_pipeline_works() {
-    let readings = vec![parse("sicaklik=-60").unwrap(), parse("sicaklik=-40").unwrap()];
+    let readings = vec![
+        parse("sicaklik=-60").unwrap(),
+        parse("sicaklik=-40").unwrap(),
+    ];
     assert!(summary(&readings).contains("2 olcum"));
     assert_eq!(table(&readings).lines().count(), 4);
 }

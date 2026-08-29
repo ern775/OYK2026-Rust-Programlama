@@ -27,7 +27,7 @@ fn lab_1_option() {
     println!("{:?} {:?}", olcumler.get(1), olcumler.get(99));
 
     // ORNEK: icini cikarmanin uc yolu
-    println!("{}", olcumler.get(1).copied().unwrap());        // yoksa PANIC
+    println!("{}", olcumler.get(1).copied().unwrap()); // yoksa PANIC
     println!("{}", olcumler.get(99).copied().unwrap_or(0.0)); // yoksa varsayilan
 
     // ORNEK: Option donduren fonksiyon - bulamazsa None
@@ -59,7 +59,7 @@ fn lab_1_option() {
 
 fn hottest(olcumler: &[f64]) -> Option<f64> {
     if olcumler.is_empty() {
-        return None;                    // olcum yoksa "en sicak" diye bir sey de yok
+        return None; // olcum yoksa "en sicak" diye bir sey de yok
     }
     let mut enb = olcumler[0];
     for o in olcumler {
@@ -174,7 +174,12 @@ fn lab_3_enum() {
 
     let mut isik = TrafficLight::Red;
     for _ in 0..4 {
-        print!("{:?}({} sn, {}) -> ", isik, isik.seconds(), behaviour(&isik));
+        print!(
+            "{:?}({} sn, {}) -> ",
+            isik,
+            isik.seconds(),
+            behaviour(&isik)
+        );
         isik = isik.next();
     }
     println!("{:?}", isik);

@@ -70,13 +70,13 @@ fn main() {
     println!("esit mi: {}", t1 == t2);
 
     // BUILDER - alan sirasi onemsiz, yazmadiginiz alan varsayilan kalir
-    let ejder = Character::new("Ejderha")
-        .health(120)
-        .attack(15)
-        .can_fly();
+    let ejder = Character::new("Ejderha").health(120).attack(15).can_fly();
     println!("{:?}", ejder);
 
-    let kopek = Character::new("Kopek").build();   // hepsi varsayilan
+    let kopek = Character::new("Kopek").build(); // hepsi varsayilan
     println!("{:?}", kopek);
-    println!("{} can={} / {} can={}", ejder.name, ejder.health, kopek.name, kopek.health);
+    println!(
+        "{} can={} / {} can={}",
+        ejder.name, ejder.health, kopek.name, kopek.health
+    );
 }

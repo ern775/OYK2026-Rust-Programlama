@@ -30,9 +30,7 @@ impl<'a> Transcript<'a> {
     }
 
     fn find_quote(&self, keyword: &str) -> Option<&str> {
-        self.source
-            .lines()
-            .find(|satir| satir.contains(keyword))
+        self.source.lines().find(|satir| satir.contains(keyword))
     }
 
     // IKI ayri omur: donen dilim SELF'ten, yeni kaynak DISARIDAN.
@@ -53,7 +51,9 @@ struct OwnedTranscript {
 
 impl OwnedTranscript {
     fn new(source: &str) -> OwnedTranscript {
-        OwnedTranscript { source: source.to_string() }   // KOPYALIYOR
+        OwnedTranscript {
+            source: source.to_string(),
+        } // KOPYALIYOR
     }
     fn first_line(&self) -> &str {
         match self.source.find('\n') {
@@ -78,7 +78,7 @@ fn build_owned() -> OwnedTranscript {
 // ---------------------------------------------------------------
 // Referans tutan struct sadece &str icin degil - her dilim icin ayni.
 struct EvidenceLog<'a> {
-    entries: &'a [u32],           // dosya numaralari
+    entries: &'a [u32], // dosya numaralari
 }
 
 impl<'a> EvidenceLog<'a> {
@@ -98,7 +98,7 @@ impl<'a> EvidenceLog<'a> {
 // 3) 'static'IN IKI ANLAMI
 // ---------------------------------------------------------------
 // (a) &'static T : bu REFERANS program boyu gecerli
-static AGENCY: &str = "Gece Vardiyasi Burosu";     // ikilinin icinde duruyor
+static AGENCY: &str = "Gece Vardiyasi Burosu"; // ikilinin icinde duruyor
 
 // (b) T: 'static : bu TIP odunc referans ICERMIYOR
 // String bunu saglar - icinde baskasina ait referans yok.
@@ -129,8 +129,11 @@ fn main() {
         Some(q) => println!("  plaka gecen: {}", q),
         None => println!("  plaka gecmiyor"),
     }
-    println!("  kaynak {} bayt, struct {} bayt (sadece pointer + uzunluk)",
-        case_text.len(), std::mem::size_of::<Transcript>());
+    println!(
+        "  kaynak {} bayt, struct {} bayt (sadece pointer + uzunluk)",
+        case_text.len(),
+        std::mem::size_of::<Transcript>()
+    );
 
     println!("-- 2) iki omurlu metot --");
     let revision = String::from("tanik A duzeltme: araba lacivertti");
@@ -142,7 +145,9 @@ fn main() {
     println!("-- 2b) ayni kalip, dilim uzerinde --");
     let first_batch = [1041u32, 1042, 1055];
     let second_batch = [2001u32, 2002];
-    let mut log = EvidenceLog { entries: &first_batch };
+    let mut log = EvidenceLog {
+        entries: &first_batch,
+    };
     println!("  en yuksek dosya no: {:?}", log.highest());
     let old = log.update_entries(&second_batch);
     // `old` 'b omrunu tasiyor: mut odunc, old'un son kullanimina kadar surer.
@@ -153,12 +158,14 @@ fn main() {
     println!("-- 3) sahiplenen surum --");
     let owned = build_owned();
     println!("  {}", owned.first_line());
-    println!("  OwnedTranscript {} bayt (String: ptr + len + cap)",
-        std::mem::size_of::<OwnedTranscript>());
+    println!(
+        "  OwnedTranscript {} bayt (String: ptr + len + cap)",
+        std::mem::size_of::<OwnedTranscript>()
+    );
 
     println!("-- 4) 'static iki anlami --");
     println!("  &'static str : {}", AGENCY);
-    let boxed_note = archive(String::from("dosya arsive kaldirildi"));   // T: 'static
+    let boxed_note = archive(String::from("dosya arsive kaldirildi")); // T: 'static
     println!("  T: 'static   : {}", boxed_note);
     // let local = String::from("gecici");
     // archive(&local);

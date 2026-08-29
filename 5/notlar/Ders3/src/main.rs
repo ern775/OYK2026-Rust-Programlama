@@ -22,7 +22,10 @@ fn main() {
     // --- NE ACIK, NE KAPALI ---
 
     // 1) UZUN YOL CALISIR: lib.rs'te `pub mod telemetry;` yazdik
-    println!("uzun yol        = {:?}", ders3::telemetry::parser::parse("sicaklik=0").is_ok());
+    println!(
+        "uzun yol        = {:?}",
+        ders3::telemetry::parser::parse("sicaklik=0").is_ok()
+    );
     // 2) KISA YOL da calisir: lib.rs'te `pub use telemetry::parse;` var
     println!("kisa yol        = {:?}", parse("sicaklik=0").is_ok());
 
@@ -30,7 +33,10 @@ fn main() {
     // ders3::calibrate(-63.2);
     //   error[E0425]: cannot find function `calibrate` in crate `ders3`
     // ama modul yolu aciktir, sunu yazabilirsiniz:
-    println!("modul yoluyla   = {:.3}", ders3::telemetry::calibrate(-63.2));
+    println!(
+        "modul yoluyla   = {:.3}",
+        ders3::telemetry::calibrate(-63.2)
+    );
 
     // 4) BU DA DERLENMEZ - alan private:
     // let sahte = Reading { value: 5.0 };

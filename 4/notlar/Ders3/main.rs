@@ -14,9 +14,9 @@ enum TrafficLight {
 // 5) VARYANTLAR VERI TASIR - Rust'in farki
 #[derive(Debug)]
 enum Shape {
-    Dot,                              // veri yok
-    Circle { r: f64 },                  // isimli alan
-    Rectangle { width: f64, height: f64 },   // iki isimli alan
+    Dot,                                   // veri yok
+    Circle { r: f64 },                     // isimli alan
+    Rectangle { width: f64, height: f64 }, // iki isimli alan
     Triangle(f64, f64, f64),               // isimsiz uclu
 }
 
@@ -63,7 +63,7 @@ impl Shape {
             Shape::Circle { r } => 3.14159 * r * r,
             Shape::Rectangle { width, height } => width * height,
             Shape::Triangle(a, b, c) => {
-                let s = (a + b + c) / 2.0;          // Heron formulu
+                let s = (a + b + c) / 2.0; // Heron formulu
                 (s * (s - a) * (s - b) * (s - c)).sqrt()
             }
         }
@@ -94,10 +94,10 @@ fn first_negative(sayilar: &[i32]) -> Option<i32> {
 }
 
 struct User {
-    id: u64,                    // her kullanicinin ID'si olmak zorunda
-    name: String,                 // her kullanicinin adi var
-    middle_name: Option<String>,// bazi insanlarin ikinci ismi YOK
-    health: i32,                   // eksik olamaz, ama 0 olabilir
+    id: u64,                     // her kullanicinin ID'si olmak zorunda
+    name: String,                // her kullanicinin adi var
+    middle_name: Option<String>, // bazi insanlarin ikinci ismi YOK
+    health: i32,                 // eksik olamaz, ama 0 olabilir
 }
 
 // arama bulamayabilir -> Option<&User>
@@ -140,7 +140,10 @@ fn main() {
     let sekiller = vec![
         Shape::Dot,
         Shape::Circle { r: 2.0 },
-        Shape::Rectangle { width: 3.0, height: 4.0 },
+        Shape::Rectangle {
+            width: 3.0,
+            height: 4.0,
+        },
         Shape::Triangle(3.0, 4.0, 5.0),
     ];
     let mut toplam = 0.0;
@@ -195,7 +198,11 @@ fn main() {
 
     // kural 2: bulunamama ihtimali imzaya yazilir
     let olcumler = [3, -7, 12, -1];
-    println!("{:?} {:?}", first_negative(&olcumler), first_negative(&[1, 2, 3]));
+    println!(
+        "{:?} {:?}",
+        first_negative(&olcumler),
+        first_negative(&[1, 2, 3])
+    );
 
     // kural 3: kutuyu acmadan icindekini kullanamazsiniz
     let d: Option<i32> = Some(5);
@@ -210,14 +217,24 @@ fn main() {
     if let Some(n) = d {
         println!("if let    -> {}", n);
     }
-    println!("unwrap    -> {}", d.unwrap());            // bossa PANIKLER
+    println!("unwrap    -> {}", d.unwrap()); // bossa PANIKLER
     println!("expect    -> {}", d.expect("olcum bekleniyordu"));
-    println!("unwrap_or -> {}", None.unwrap_or(0));     // bossa varsayilan
+    println!("unwrap_or -> {}", None.unwrap_or(0)); // bossa varsayilan
 
     // HANGI DURUMDA HANGI TIP - her alan icin "bu olmayabilir mi?" diye sorun
     let kayitlar = vec![
-        User { id: 1, name: String::from("Ada"), middle_name: Some(String::from("Lovelace")), health: 100 },
-        User { id: 2, name: String::from("Ege"), middle_name: None, health: 0 },
+        User {
+            id: 1,
+            name: String::from("Ada"),
+            middle_name: Some(String::from("Lovelace")),
+            health: 100,
+        },
+        User {
+            id: 2,
+            name: String::from("Ege"),
+            middle_name: None,
+            health: 0,
+        },
     ];
 
     for k in &kayitlar {
@@ -270,21 +287,41 @@ fn main() {
     // -----------------------------------------------------------
     // kenar not 1 - bellekte enum: etiket + en buyuk varyant + hizalama
     // -----------------------------------------------------------
-    println!("TrafficLight = {} bayt   Shape = {} bayt", size_of::<TrafficLight>(), size_of::<Shape>());
+    println!(
+        "TrafficLight = {} bayt   Shape = {} bayt",
+        size_of::<TrafficLight>(),
+        size_of::<Shape>()
+    );
 
     // niche optimization: Box asla null olamaz, None o bos desene yerlesir
     println!("Box<i32>         = {} bayt", size_of::<Box<i32>>());
-    println!("Option<Box<i32>> = {} bayt  <- None bedava", size_of::<Option<Box<i32>>>());
+    println!(
+        "Option<Box<i32>> = {} bayt  <- None bedava",
+        size_of::<Option<Box<i32>>>()
+    );
     println!("i32              = {} bayt", size_of::<i32>());
-    println!("Option<i32>      = {} bayt  <- etiket icin yer gerekti", size_of::<Option<i32>>());
+    println!(
+        "Option<i32>      = {} bayt  <- etiket icin yer gerekti",
+        size_of::<Option<i32>>()
+    );
 
     // ayni garanti referanslarda da var: safe Rust'ta &T asla null olamaz
     println!("&i32                 = {} bayt", size_of::<&i32>());
-    println!("Option<&i32>         = {} bayt  <- None bedava", size_of::<Option<&i32>>());
+    println!(
+        "Option<&i32>         = {} bayt  <- None bedava",
+        size_of::<Option<&i32>>()
+    );
     // ham isaretci null OLABILIR, o yuzden bos desen kalmiyor:
     println!("*const i32           = {} bayt", size_of::<*const i32>());
-    println!("Option<*const i32>   = {} bayt  <- iki katina cikti", size_of::<Option<*const i32>>());
+    println!(
+        "Option<*const i32>   = {} bayt  <- iki katina cikti",
+        size_of::<Option<*const i32>>()
+    );
 
     // kenar not 2 - sayisal deger
-    println!("{} {}", HttpStatus::Success as i32, HttpStatus::NotFound as i32);
+    println!(
+        "{} {}",
+        HttpStatus::Success as i32,
+        HttpStatus::NotFound as i32
+    );
 }

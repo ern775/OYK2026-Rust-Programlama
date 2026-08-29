@@ -1,12 +1,12 @@
 //! Telemetri satirlarini ayristirir.
 
-use super::error::TelemetryError;   // kardes alt modul
-use super::validation;              // super:: = bir ust modul (telemetry)
+use super::error::TelemetryError; // kardes alt modul
+use super::validation; // super:: = bir ust modul (telemetry)
 
 /// Dogrulanmis bir olcum.
 #[derive(Debug, PartialEq)]
 pub struct Reading {
-    value: f64,                 // private: gecersiz Reading uretilemesin
+    value: f64, // private: gecersiz Reading uretilemesin
 }
 
 impl Reading {
@@ -38,7 +38,7 @@ pub fn parse(line: &str) -> Result<Reading, TelemetryError> {
     if !validation::in_range(value) {
         return Err(TelemetryError::OutOfRange { value });
     }
-    Ok(Reading { value })       // ayni modulde oldugumuz icin private alani doldurabiliriz
+    Ok(Reading { value }) // ayni modulde oldugumuz icin private alani doldurabiliriz
 }
 
 #[cfg(test)]

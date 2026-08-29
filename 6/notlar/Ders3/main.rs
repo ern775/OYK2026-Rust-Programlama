@@ -85,11 +85,7 @@ impl TryFrom<i32> for Hp {
     type Error = NegativeHp;
 
     fn try_from(v: i32) -> Result<Hp, Self::Error> {
-        if v < 0 {
-            Err(NegativeHp(v))
-        } else {
-            Ok(Hp(v))
-        }
+        if v < 0 { Err(NegativeHp(v)) } else { Ok(Hp(v)) }
     }
 }
 
@@ -97,14 +93,16 @@ impl TryFrom<i32> for Hp {
 // 4) OPERATOR ASIRI YUKLEME: + - * birer trait
 // ---------------------------------------------------------------
 impl Add for Hp {
-    type Output = Hp;            // associated type: donus tipini trait belirliyor
-    fn add(self, o: Hp) -> Hp { Hp(self.0 + o.0) }
+    type Output = Hp; // associated type: donus tipini trait belirliyor
+    fn add(self, o: Hp) -> Hp {
+        Hp(self.0 + o.0)
+    }
 }
 
 impl Sub for Hp {
     type Output = Hp;
     fn sub(self, o: Hp) -> Hp {
-        Hp((self.0 - o.0).max(0))    // can sifirin altina inmez
+        Hp((self.0 - o.0).max(0)) // can sifirin altina inmez
     }
 }
 
@@ -119,7 +117,9 @@ impl Mul<CritMultiplier> for Hp {
 // Seviye + kazanilan seviye
 impl Add<u32> for Level {
     type Output = Level;
-    fn add(self, k: u32) -> Level { Level(self.0 + k) }
+    fn add(self, k: u32) -> Level {
+        Level(self.0 + k)
+    }
 }
 
 // ---------------------------------------------------------------
@@ -151,12 +151,12 @@ fn main() {
     println!("  iksir icildi    : {}", archer_hp + Hp(40));
     println!("  kritik x2.5     : {}", hit * CritMultiplier(2.5));
     println!("  seviye atladi   : {}", Level(7) + 1);
-    println!("  can sifirin alti: {}", Hp(10) - Hp(50));   // 0'da duruyor
+    println!("  can sifirin alti: {}", Hp(10) - Hp(50)); // 0'da duruyor
 
     println!("-- From / Into --");
     let level = Level(7);
-    let base_hp: Hp = Hp::from(level);      // From ile
-    let base_mana: Mana = level.into();      // Into BEDAVA geldi
+    let base_hp: Hp = Hp::from(level); // From ile
+    let base_mana: Mana = level.into(); // Into BEDAVA geldi
     println!("  {} -> {} + {}", level, base_hp, base_mana);
 
     // Seviye atlayinca can/mana KENDILIGINDEN degismez, yeniden turetilir.
@@ -166,8 +166,8 @@ fn main() {
     println!("  seviye atladi: {} -> {} + {}", level, base_hp, base_mana);
 
     println!("-- impl Into<T> parametresi --");
-    print_hp(Level(3));                            // Level verdik
-    print_hp(Hp(120));                             // Hp de verebiliriz
+    print_hp(Level(3)); // Level verdik
+    print_hp(Hp(120)); // Hp de verebiliriz
 
     println!("-- TryFrom: basarisiz olabilen donusum --");
     println!("  {:?}", Hp::try_from(250));
@@ -187,17 +187,27 @@ fn main() {
 
     println!("-- Ord: Level siralanabiliyor, CritMultiplier siralanamiyor --");
     let mut levels = vec![Level(12), Level(3), Level(27), Level(9)];
-    levels.sort();                                   // Ord derive edildi
+    levels.sort(); // Ord derive edildi
     print!("  ");
-    for l in &levels { print!("{} | ", l); }
+    for l in &levels {
+        print!("{} | ", l);
+    }
     println!();
-    println!("  en dusuk: {}   en yuksek: {}", levels[0], levels[levels.len() - 1]);
+    println!(
+        "  en dusuk: {}   en yuksek: {}",
+        levels[0],
+        levels[levels.len() - 1]
+    );
 
-    let mut crits = vec![CritMultiplier(2.0), CritMultiplier(1.25), CritMultiplier(3.0)];
+    let mut crits = vec![
+        CritMultiplier(2.0),
+        CritMultiplier(1.25),
+        CritMultiplier(3.0),
+    ];
     // crits.sort();
     //   E0277: the trait bound `CritMultiplier: Ord` is not satisfied
     //   -> f64 iceriyor, NaN yuzunden tam siralama yok
-    crits.sort_by(|a, b| a.partial_cmp(b).unwrap());   // PartialOrd yetiyor
+    crits.sort_by(|a, b| a.partial_cmp(b).unwrap()); // PartialOrd yetiyor
     println!("  crits: {:?}", crits);
 
     println!("-- Default --");
@@ -207,6 +217,9 @@ fn main() {
     // let wrong = archer_hp + Mana(10);
     //   E0308: expected `Hp`, found `Mana`
     //   Can ile mana ayri tip oldugu icin KARISAMAZLAR. Bedeli sifir:
-    println!("  Hp = {} bayt, i32 = {} bayt",
-        std::mem::size_of::<Hp>(), std::mem::size_of::<i32>());
+    println!(
+        "  Hp = {} bayt, i32 = {} bayt",
+        std::mem::size_of::<Hp>(),
+        std::mem::size_of::<i32>()
+    );
 }

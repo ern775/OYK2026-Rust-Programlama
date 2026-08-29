@@ -36,7 +36,10 @@ impl<T> Stash<T> {
         //   let eski = self.head;
         //   E0507: cannot move out of `self.head` which is behind a mutable reference
         // take() cozumu: yerine None birakir, eskisini bize verir.
-        let yeni = Box::new(Node { elem, next: self.head.take() });
+        let yeni = Box::new(Node {
+            elem,
+            next: self.head.take(),
+        });
         self.head = Some(yeni);
         self.len += 1;
     }
@@ -44,7 +47,7 @@ impl<T> Stash<T> {
     // EN USTTEKINI cikar. Liste bossa None.
     fn pop(&mut self) -> Option<T> {
         self.head.take().map(|dugum| {
-            self.head = dugum.next;      // dugum burada sahiplenildi, alanlari serbest
+            self.head = dugum.next; // dugum burada sahiplenildi, alanlari serbest
             self.len -= 1;
             dugum.elem
         })
@@ -69,7 +72,9 @@ impl<T> Stash<T> {
 
     // Odunc alarak gezen iterator (Gun 6: associated type, dun: lifetime)
     fn iter(&self) -> Iter<'_, T> {
-        Iter { simdiki: self.head.as_deref() }
+        Iter {
+            simdiki: self.head.as_deref(),
+        }
     }
 }
 
@@ -81,7 +86,7 @@ struct Iter<'a, T> {
 }
 
 impl<'a, T> Iterator for Iter<'a, T> {
-    type Item = &'a T;                   // Gun 6: bir iterator TEK tip uretir
+    type Item = &'a T; // Gun 6: bir iterator TEK tip uretir
 
     fn next(&mut self) -> Option<&'a T> {
         self.simdiki.map(|dugum| {
@@ -109,7 +114,7 @@ impl<T> Drop for Stash<T> {
     fn drop(&mut self) {
         let mut simdiki = self.head.take();
         while let Some(mut dugum) = simdiki {
-            simdiki = dugum.next.take();  // baglantiyi kes, sonra dugum dussun
+            simdiki = dugum.next.take(); // baglantiyi kes, sonra dugum dussun
         }
     }
 }
@@ -148,14 +153,23 @@ fn main() {
     // iter() ODUNC aliyor: liste yerinde duruyor
     let toplam: u32 = sayilar.iter().sum();
     let en_buyuk = sayilar.iter().max();
-    println!("  toplam {} | en buyuk {:?} | uzunluk {}", toplam, en_buyuk, sayilar.len());
+    println!(
+        "  toplam {} | en buyuk {:?} | uzunluk {}",
+        toplam,
+        en_buyuk,
+        sayilar.len()
+    );
     // Gun 7'nin kombinatorleri burada da calisiyor:
     let buyukler: Vec<&u32> = sayilar.iter().filter(|n| **n > 15).collect();
     println!("  15'ten buyukler: {:?}", buyukler);
 
     println!("-- 6) sahiplenen iterator: liste tukenir --");
-    let toplam2: u32 = sayilar.by_ref().take(2).sum();   // ilk iki cantayi TUKETIR
-    println!("  ilk ikisinin toplami: {} | kalan uzunluk: {}", toplam2, sayilar.len());
+    let toplam2: u32 = sayilar.by_ref().take(2).sum(); // ilk iki cantayi TUKETIR
+    println!(
+        "  ilk ikisinin toplami: {} | kalan uzunluk: {}",
+        toplam2,
+        sayilar.len()
+    );
 
     println!("-- 7) uzun liste: iteratif Drop --");
     let mut buyuk: Stash<u32> = Stash::new();

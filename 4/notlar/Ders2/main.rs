@@ -46,7 +46,12 @@ struct Character {
 
 impl Character {
     fn new(name: &str) -> Character {
-        Character { name: name.to_string(), health: 100, attack: 10, can_fly: false }
+        Character {
+            name: name.to_string(),
+            health: 100,
+            attack: 10,
+            can_fly: false,
+        }
     }
 
     // her halka: mut self alir, bir alani degistirir, self'i geri dondurur
@@ -71,23 +76,41 @@ impl Character {
 }
 
 fn main() {
-    let t1 = LapTime { minutes: 3, seconds: 45 };
-    let t2 = LapTime { minutes: 3, seconds: 5 };
+    let t1 = LapTime {
+        minutes: 3,
+        seconds: 45,
+    };
+    let t2 = LapTime {
+        minutes: 3,
+        seconds: 5,
+    };
 
     // Debug gelistirici icin, Display kullanici icin
     println!("{:?}", t1);
     println!("{:#?}", t2);
-    println!("{} ve {}", t1, t2);        // Display: 3:45 ve 3:05
+    println!("{} ve {}", t1, t2); // Display: 3:45 ve 3:05
 
     // PartialEq -> ==
     println!("esit mi: {}", t1 == t2);
 
     // Ord -> siralama LEKSIKOGRAFIK: once dakika, esitse saniye
     let mut turlar = vec![
-        LapTime { minutes: 4, seconds: 2 },
-        LapTime { minutes: 3, seconds: 45 },
-        LapTime { minutes: 3, seconds: 5 },
-        LapTime { minutes: 3, seconds: 45 },
+        LapTime {
+            minutes: 4,
+            seconds: 2,
+        },
+        LapTime {
+            minutes: 3,
+            seconds: 45,
+        },
+        LapTime {
+            minutes: 3,
+            seconds: 5,
+        },
+        LapTime {
+            minutes: 3,
+            seconds: 45,
+        },
     ];
     turlar.sort();
     print!("sirali turlar: ");
@@ -102,7 +125,8 @@ fn main() {
     // Hash + Eq -> HashSet anahtari olabilir; tekrar eden turu bulalim
     let mut gorulen = HashSet::new();
     for t in &turlar {
-        if !gorulen.insert(*t) {         // Copy oldugu icin *t ile kopyaladik
+        if !gorulen.insert(*t) {
+            // Copy oldugu icin *t ile kopyaladik
             println!("ayni tur iki kez atildi: {}", t);
         }
     }
@@ -111,12 +135,18 @@ fn main() {
     println!("varsayilan sure: {}", LapTime::default());
 
     // Copy: atama TASIMAZ, kopyalar
-    let a = LapTime { minutes: 1, seconds: 30 };
+    let a = LapTime {
+        minutes: 1,
+        seconds: 30,
+    };
     let b = a;
     println!("ikisi de yasiyor: {} {}", a, b);
 
     // String iceren tip Copy degil - clone gerekir
-    let p1 = Pilot { name: String::from("Ada"), lap: t1 };
+    let p1 = Pilot {
+        name: String::from("Ada"),
+        lap: t1,
+    };
     let p2 = p1.clone();
     // println!("{:?}", p1);            // p2 = p1 yazsaydik burasi E0382 olurdu
     println!("{:?} / {:?}", p1.name, p2.name);
@@ -125,7 +155,7 @@ fn main() {
     let n1 = Point { x: 1.0, y: 2.0 };
     let n2 = Point { x: 1.0, y: 2.0 };
     println!("{:?} == {:?} -> {}", n1, n2, n1 == n2);
-    println!("0.1 + 0.2 == 0.3 -> {}", 0.1 + 0.2 == 0.3);   // iste bu yuzden Eq yok
+    println!("0.1 + 0.2 == 0.3 -> {}", 0.1 + 0.2 == 0.3); // iste bu yuzden Eq yok
 
     // f64 listesi sort() ile siralanamaz, partial_cmp kalibi gerekir
     let mut olcumler = vec![2.5, 1.25, 3.75];
@@ -153,9 +183,12 @@ fn main() {
         .build();
     println!("{:?}", ejder);
 
-    let kopek = Character::new("Kopek").build();   // hepsi varsayilan
+    let kopek = Character::new("Kopek").build(); // hepsi varsayilan
     println!("{:?}", kopek);
-    println!("{} can={} / {} can={}", ejder.name, ejder.health, kopek.name, kopek.health);
+    println!(
+        "{} can={} / {} can={}",
+        ejder.name, ejder.health, kopek.name, kopek.health
+    );
 
     // her halka self'i TUKETIR - ara degisken iki zincire sokulamaz
     // let ara = Character::new("Ork").health(50);

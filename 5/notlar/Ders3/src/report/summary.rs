@@ -23,16 +23,16 @@ pub fn summary(readings: &[Reading]) -> String {
         internal_label(),
         readings.len(),
         avg,
-        calibrate(avg),                    // disariya acilmadi ama crate icinde kullanilabiliyor
-        validation::description(),         // pub(crate)
-        validation::calibrated_upper()     // icinde super::calibrate cagiriyor
+        calibrate(avg), // disariya acilmadi ama crate icinde kullanilabiliyor
+        validation::description(), // pub(crate)
+        validation::calibrated_upper()  // icinde super::calibrate cagiriyor
     )
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::telemetry::parse;     // testte de kardes modulu kullanabiliyoruz
+    use crate::telemetry::parse; // testte de kardes modulu kullanabiliyoruz
 
     #[test]
     fn empty_input() {

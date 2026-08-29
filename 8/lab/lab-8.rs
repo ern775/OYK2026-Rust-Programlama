@@ -17,7 +17,7 @@
 
 // NOT: Waker::noop() icin rustc 1.85+ gerekir.
 use std::future::Future;
-use std::pin::{pin, Pin};
+use std::pin::{Pin, pin};
 use std::sync::mpsc;
 use std::sync::{Arc, Mutex, RwLock};
 use std::task::{Context, Poll, Waker};
@@ -163,7 +163,10 @@ struct Ice {
 
 impl Ice {
     fn crack(layer: &'static str, ms: u64) -> Ice {
-        Ice { layer, ready_at: Instant::now() + Duration::from_millis(ms) }
+        Ice {
+            layer,
+            ready_at: Instant::now() + Duration::from_millis(ms),
+        }
     }
 }
 

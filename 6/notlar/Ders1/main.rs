@@ -14,7 +14,9 @@ use std::fmt::Debug;
 fn strongest_i32(stats: &[i32]) -> i32 {
     let mut en = stats[0];
     for &x in stats {
-        if x > en { en = x; }
+        if x > en {
+            en = x;
+        }
     }
     en
 }
@@ -22,7 +24,9 @@ fn strongest_i32(stats: &[i32]) -> i32 {
 fn strongest_f64(stats: &[f64]) -> f64 {
     let mut en = stats[0];
     for &x in stats {
-        if x > en { en = x; }
+        if x > en {
+            en = x;
+        }
     }
     en
 }
@@ -43,7 +47,9 @@ fn strongest_f64(stats: &[f64]) -> f64 {
 fn strongest<T: PartialOrd + Copy>(stats: &[T]) -> T {
     let mut en = stats[0];
     for &x in stats {
-        if x > en { en = x; }
+        if x > en {
+            en = x;
+        }
     }
     en
 }
@@ -70,7 +76,10 @@ struct Slot<T> {
 // impl<T> ... : BUTUN T'ler icin
 impl<T> Slot<T> {
     fn new(label: &str, item: T) -> Self {
-        Slot { label: label.to_string(), item }
+        Slot {
+            label: label.to_string(),
+            item,
+        }
     }
     fn item(&self) -> &T {
         &self.item
@@ -110,7 +119,10 @@ struct Loadout<W, A> {
 impl<W, A> Loadout<W, A> {
     // iki eli degistirir: tipler de yer degistirir
     fn swap_hands(self) -> Loadout<A, W> {
-        Loadout { weapon: self.armor, armor: self.weapon }
+        Loadout {
+            weapon: self.armor,
+            armor: self.weapon,
+        }
     }
 }
 
@@ -132,11 +144,11 @@ fn first_member<T: Copy, const N: usize>(party: &[T; N]) -> T {
 }
 
 fn party_size<T, const N: usize>(_party: &[T; N]) -> usize {
-    N                       // uzunluk DERLEME zamaninda biliniyor
+    N // uzunluk DERLEME zamaninda biliniyor
 }
 
 fn main() {
-    let attack_powers = [12, 18, 55, 3];         // okcu, sovalye, ejderha, sifaci
+    let attack_powers = [12, 18, 55, 3]; // okcu, sovalye, ejderha, sifaci
     let crit_multipliers = [1.5, 2.0, 1.25];
 
     println!("-- 1) tekrar eden iki fonksiyon --");
@@ -144,8 +156,15 @@ fn main() {
     println!("  strongest_f64 : {}", strongest_f64(&crit_multipliers));
 
     println!("-- 2) tek generic fonksiyon ikisini de yapiyor --");
-    println!("  {} / {}", strongest(&attack_powers), strongest(&crit_multipliers));
-    println!("  harflerde bile: {}", strongest(&['e', 'j', 'd', 'e', 'r']));
+    println!(
+        "  {} / {}",
+        strongest(&attack_powers),
+        strongest(&crit_multipliers)
+    );
+    println!(
+        "  harflerde bile: {}",
+        strongest(&['e', 'j', 'd', 'e', 'r'])
+    );
 
     println!("-- 3) generic struct --");
     let potion_slot = Slot::new("potion_slot", Potion { heal: 40 });
@@ -164,7 +183,10 @@ fn main() {
     //   -> impl Slot<Potion> yazdik, kilic yuvasinda (Slot<Sword>) boyle bir metot YOK
 
     println!("-- 4) iki tipli generic --");
-    let loadout = Loadout { weapon: Sword { damage: 25 }, armor: "chainmail" };
+    let loadout = Loadout {
+        weapon: Sword { damage: 25 },
+        armor: "chainmail",
+    };
     println!("  {:?}", loadout);
     println!("  {:?}", loadout.swap_hands());
 
@@ -174,9 +196,13 @@ fn main() {
     println!("-- 6) const generics --");
     let trio = [12, 18, 55];
     let quintet = [1.5, 2.0, 1.25, 3.0, 1.1];
-    println!("  ilk / kadro: {} {}  |  {} {}",
-        first_member(&trio), party_size(&trio),
-        first_member(&quintet), party_size(&quintet));
+    println!(
+        "  ilk / kadro: {} {}  |  {} {}",
+        first_member(&trio),
+        party_size(&trio),
+        first_member(&quintet),
+        party_size(&quintet)
+    );
 
     // MONOMORPHIZATION: derleyici her somut tip icin AYRI fonksiyon uretti.
     // Calisma zamaninda generic diye bir sey yok - maliyet SIFIR.

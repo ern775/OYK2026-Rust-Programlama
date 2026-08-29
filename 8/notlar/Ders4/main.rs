@@ -20,13 +20,13 @@ use std::time::{Duration, Instant};
 // ASYNC FN - derleyici bunu bir durum makinesine cevirir
 // ---------------------------------------------------------------
 async fn breach(layer: &'static str, ms: u64) -> String {
-    let sonuc = Ice::crack(layer, ms).await;       // .await = "hazir olana kadar sirala"
+    let sonuc = Ice::crack(layer, ms).await; // .await = "hazir olana kadar sirala"
     format!("[{}]", sonuc)
 }
 
 fn main() {
     println!("-- 1) Future TEMBELDIR --");
-    let is = breach("kamera agi", 50);             // hicbir sey calismadi
+    let is = breach("kamera agi", 50); // hicbir sey calismadi
     println!("  async fn cagrildi, KIRMA BASLAMADI");
     println!("  ...simdi block_on ile calistiriyoruz");
     println!("  {}", block_on(is));
@@ -68,7 +68,7 @@ fn main() {
 // ===============================================================
 // ALTYAPI - bugunun konusu DEGIL
 // ===============================================================
-use std::pin::{pin, Pin};
+use std::pin::{Pin, pin};
 
 // Bir Future kendi kendine calismaz; birinin poll() cagirmasi gerekir.
 // Gercek projede bunu tokio yapar. Burada crate indirmemek icin
@@ -87,12 +87,12 @@ fn block_on<F: Future>(future: F) -> F::Output {
     // pin!: degeri stack'te SABITLER. Future kendi icine referans tutabilir,
     // tasinirsa o referans bozulur - Pin bunu engelleyen soz. (Notlarda detayi var.)
     let mut future = pin!(future);
-    let waker = Waker::noop();                    // "hazir olunca haber ver" mekanizmasi
+    let waker = Waker::noop(); // "hazir olunca haber ver" mekanizmasi
     let mut cx = Context::from_waker(waker);
     loop {
         match future.as_mut().poll(&mut cx) {
-            Poll::Ready(deger) => return deger,    // is bitti
-            Poll::Pending => thread::yield_now(),  // hazir degil, sonra tekrar sor
+            Poll::Ready(deger) => return deger,   // is bitti
+            Poll::Pending => thread::yield_now(), // hazir degil, sonra tekrar sor
         }
     }
 }
@@ -108,7 +108,10 @@ struct Ice {
 
 impl Ice {
     fn crack(layer: &'static str, ms: u64) -> Ice {
-        Ice { layer, ready_at: Instant::now() + Duration::from_millis(ms) }
+        Ice {
+            layer,
+            ready_at: Instant::now() + Duration::from_millis(ms),
+        }
     }
 }
 
@@ -140,7 +143,10 @@ struct JoinAll {
 impl JoinAll {
     fn new(isler: Vec<Pin<Box<dyn Future<Output = String>>>>) -> JoinAll {
         let n = isler.len();
-        JoinAll { isler, sonuclar: vec![None; n] }
+        JoinAll {
+            isler,
+            sonuclar: vec![None; n],
+        }
     }
 }
 
@@ -152,7 +158,7 @@ impl Future for JoinAll {
         let mut hepsi_bitti = true;
         for (i, is) in me.isler.iter_mut().enumerate() {
             if me.sonuclar[i].is_some() {
-                continue;                          // bu is zaten bitmis
+                continue; // bu is zaten bitmis
             }
             match is.as_mut().poll(cx) {
                 Poll::Ready(v) => me.sonuclar[i] = Some(v),

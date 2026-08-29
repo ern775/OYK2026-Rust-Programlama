@@ -31,11 +31,11 @@ fn main() {
     let y = x;
     println!("{} {}", x, y);
 
-    let t = (1, 2.5, 'a');              // tum alanlari Copy ise tuple da Copy
+    let t = (1, 2.5, 'a'); // tum alanlari Copy ise tuple da Copy
     let u = t;
     println!("{:?} {:?}", t, u);
 
-    let d = [1, 2, 3];                  // dizi de Copy
+    let d = [1, 2, 3]; // dizi de Copy
     let e = d;
     println!("{:?} {:?}", d, e);
 
@@ -55,7 +55,7 @@ fn main() {
     let k1 = (String::from("ilk"), String::from("ikinci"));
     let ilk = k1.0;
     // println!("{:?}", k1);            // E0382 partially moved
-    println!("{} {}", ilk, k1.1);       // k1.1 hala erisilebilir
+    println!("{} {}", ilk, k1.1); // k1.1 hala erisilebilir
 
     // shadowing move degil, eski deger hemen duser
     // ilk g hic kullanilmiyor - uyari dogru, gosterdigimiz sey de tam bu

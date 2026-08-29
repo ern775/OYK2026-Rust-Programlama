@@ -39,7 +39,10 @@ struct Clue {
 
 impl Clue {
     fn new(text: &str) -> Clue {
-        Clue { text: text.to_string(), next: None }
+        Clue {
+            text: text.to_string(),
+            next: None,
+        }
     }
 
     // GOREV 1a: zincire yeni ipucu bagla. self'i TUKETIP yeni Clue dondur.
@@ -64,7 +67,10 @@ struct CaseFile {
 
 impl CaseFile {
     fn new(code: &str) -> CaseFile {
-        CaseFile { code: code.to_string(), notes: RefCell::new(Vec::new()) }
+        CaseFile {
+            code: code.to_string(),
+            notes: RefCell::new(Vec::new()),
+        }
     }
 
     // GOREV 1d: iki metot ekleyin. DIKKAT: ikisi de &self aliyor, &mut self DEGIL.
@@ -94,8 +100,10 @@ fn lab_1_akilli_isaretciler() {
     // ORNEK (calisiyor)
     let clue = Clue::new("otoparktaki bilet");
     println!("  ilk ipucu   : {}", clue.text);
-    println!("  Box<Clue>   : {} bayt (icindekinin boyutu ne olursa olsun)",
-        size_of::<Box<Clue>>());
+    println!(
+        "  Box<Clue>   : {} bayt (icindekinin boyutu ne olursa olsun)",
+        size_of::<Box<Clue>>()
+    );
 
     // GOREV 1e: uc ipucu zincirleyip chain() ile yazdirin.
     //   BEKLENEN: otoparktaki bilet -> plaka kaydi -> gece bekcisi
@@ -233,8 +241,11 @@ fn lab_3_struct_omru() {
     println!("== LAB 3: struct omru ==");
     let text = String::from("tanik: kamyon lacivertti\nsofor uzun boyluydu");
     let statement = Statement { source: &text };
-    println!("  kaynak {} bayt, struct {} bayt",
-        text.len(), size_of::<Statement>());
+    println!(
+        "  kaynak {} bayt, struct {} bayt",
+        text.len(),
+        size_of::<Statement>()
+    );
 
     // GOREV 3f: 3a'yi bitirince first_line ve quote_with("sofor") ciktilarini yazdirin.
     //   BEKLENEN: "tanik: kamyon lacivertti" ve Some("sofor uzun boyluydu")
@@ -246,8 +257,8 @@ fn lab_3_struct_omru() {
 #[derive(Debug, Clone)]
 struct Tip {
     text: String,
-    weight: u8,          // 0-10 guvenilirlik
-    source: String,      // muhbir
+    weight: u8,     // 0-10 guvenilirlik
+    source: String, // muhbir
 }
 
 // GOREV 4b: closure alan bir fonksiyon yazin. Neden generic olmak zorunda?
@@ -263,16 +274,36 @@ struct Tip {
 fn lab_4_closure() {
     println!("== LAB 4: closure ==");
     let tips = vec![
-        Tip { text: String::from("kamyon plakasi"), weight: 9, source: String::from("trafik") },
-        Tip { text: String::from("isimsiz ihbar"), weight: 3, source: String::from("bilinmiyor") },
-        Tip { text: String::from("liman kamerasi"), weight: 8, source: String::from("guvenlik") },
-        Tip { text: String::from("kahvehane dedikodusu"), weight: 2, source: String::from("bilinmiyor") },
+        Tip {
+            text: String::from("kamyon plakasi"),
+            weight: 9,
+            source: String::from("trafik"),
+        },
+        Tip {
+            text: String::from("isimsiz ihbar"),
+            weight: 3,
+            source: String::from("bilinmiyor"),
+        },
+        Tip {
+            text: String::from("liman kamerasi"),
+            weight: 8,
+            source: String::from("guvenlik"),
+        },
+        Tip {
+            text: String::from("kahvehane dedikodusu"),
+            weight: 2,
+            source: String::from("bilinmiyor"),
+        },
     ];
 
     // ORNEK (calisiyor): closure cevredeki threshold'u YAKALIYOR
     let threshold = 5;
     let strong = |t: &Tip| t.weight >= threshold;
-    println!("  esik {} -> {} guclu ipucu", threshold, tips.iter().filter(|t| strong(t)).count());
+    println!(
+        "  esik {} -> {} guclu ipucu",
+        threshold,
+        tips.iter().filter(|t| strong(t)).count()
+    );
 
     // HATA DENEYI 4a: ayni seyi fonksiyonla yapin.
     // fn strong_fn(t: &Tip) -> bool { t.weight >= threshold }
@@ -327,10 +358,26 @@ fn lab_4_closure() {
 fn lab_5_kural_motoru() {
     println!("== LAB 5: kural motoru ==");
     let tips = vec![
-        Tip { text: String::from("kamyon plakasi"), weight: 9, source: String::from("trafik") },
-        Tip { text: String::from("isimsiz ihbar"), weight: 3, source: String::from("bilinmiyor") },
-        Tip { text: String::from("liman kamerasi"), weight: 8, source: String::from("guvenlik") },
-        Tip { text: String::from("kahvehane dedikodusu"), weight: 2, source: String::from("bilinmiyor") },
+        Tip {
+            text: String::from("kamyon plakasi"),
+            weight: 9,
+            source: String::from("trafik"),
+        },
+        Tip {
+            text: String::from("isimsiz ihbar"),
+            weight: 3,
+            source: String::from("bilinmiyor"),
+        },
+        Tip {
+            text: String::from("liman kamerasi"),
+            weight: 8,
+            source: String::from("guvenlik"),
+        },
+        Tip {
+            text: String::from("kahvehane dedikodusu"),
+            weight: 2,
+            source: String::from("bilinmiyor"),
+        },
     ];
 
     // ORNEK (calisiyor): tembellik. Adaptor kurulunca HICBIR SEY yazilmiyor.

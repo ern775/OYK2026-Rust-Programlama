@@ -16,6 +16,7 @@ fn main() {
     // mpsc = multi producer, single consumer
     let (tx, rx) = mpsc::channel();
     thread::spawn(move || {
+        println!("{:?}", tx);
         tx.send(String::from("catiya cikildi")).unwrap();
     });
     // recv() BLOKLAR: mesaj gelene kadar bekler.
@@ -60,11 +61,16 @@ fn main() {
     println!("-- 3) alici bir ITERATOR'dur --");
     let (tx, rx) = mpsc::channel();
     thread::spawn(move || {
-        for rapor in ["kat 12 temiz", "kamera kapali", "kasa gorundu", "cikis serbest"] {
+        for rapor in [
+            "kat 12 temiz",
+            "kamera kapali",
+            "kasa gorundu",
+            "cikis serbest",
+        ] {
             tx.send(rapor).unwrap();
-            thread::sleep(Duration::from_millis(5));
+            thread::sleep(Duration::from_millis(500));
         }
-    });   // tx burada dustu -> kanal KAPANDI
+    }); // tx burada dustu -> kanal KAPANDI
     // Dongu kanal kapaninca kendiliginden biter.
     for gelen in rx {
         println!("    >> {}", gelen);
@@ -73,17 +79,17 @@ fn main() {
     println!("-- 4) cok gonderici (mpsc'nin 'mp'si) --");
     let (tx, rx) = mpsc::channel();
     for uye in 1..=3 {
-        let tx = tx.clone();                     // her uye kendi telsizini alir
+        let tx = tx.clone(); // her uye kendi telsizini alir
         thread::spawn(move || {
             tx.send(format!("{}. uye pozisyonda", uye)).unwrap();
         });
     }
-    drop(tx);                                    // ORIJINALI dusurmeyi UNUTMAYIN
+    drop(tx); // ORIJINALI dusurmeyi UNUTMAYIN
     //   Bu satir olmasaydi asagidaki dongu SONSUZA KADAR beklerdi:
     //   klonlar dustu ama orijinal tx hala yasiyor -> kanal kapanmiyor.
     //   Siniftaki en sik takilma noktasi budur.
     let mut mesajlar: Vec<String> = rx.iter().collect();
-    mesajlar.sort();                             // varis sirasi garanti degil
+    mesajlar.sort(); // varis sirasi garanti degil
     for m in &mesajlar {
         println!("    {}", m);
     }
@@ -97,18 +103,20 @@ fn main() {
     for kasaci in 1..=3u32 {
         let is_rx = Arc::clone(&is_rx);
         let sonuc_tx = sonuc_tx.clone();
-        thread::spawn(move || loop {
-            // KRITIK: kilit SADECE is almak icin tutuluyor.
-            let is = {
-                let kuyruk = is_rx.lock().unwrap();
-                kuyruk.recv()
-            };                                   // kilit burada birakildi
-            match is {
-                Ok(kapi) => {
-                    let kod = sifre_kir(kapi);          // hesap KILIT DISINDA
-                    sonuc_tx.send((kasaci, kapi, kod)).unwrap();
+        thread::spawn(move || {
+            loop {
+                // KRITIK: kilit SADECE is almak icin tutuluyor.
+                let is = {
+                    let kuyruk = is_rx.lock().unwrap();
+                    kuyruk.recv()
+                }; // kilit burada birakildi
+                match is {
+                    Ok(kapi) => {
+                        let kod = sifre_kir(kapi); // hesap KILIT DISINDA
+                        sonuc_tx.send((kasaci, kapi, kod)).unwrap();
+                    }
+                    Err(_) => break, // kanal kapandi, is bitti
                 }
-                Err(_) => break,                 // kanal kapandi, is bitti
             }
         });
     }
@@ -117,7 +125,7 @@ fn main() {
     for kapi in 1..=9u32 {
         is_tx.send(kapi).unwrap();
     }
-    drop(is_tx);                                 // kuyruk kapandi -> kasacilar cikacak
+    drop(is_tx); // kuyruk kapandi -> kasacilar cikacak
 
     let mut sonuclar: Vec<(u32, u32, u64)> = sonuc_rx.iter().collect();
     sonuclar.sort_by_key(|(_, kapi, _)| *kapi);
@@ -131,11 +139,11 @@ fn main() {
     let (tx, rx) = mpsc::sync_channel(2);
     let uretici = thread::spawn(move || {
         for i in 1..=5 {
-            tx.send(i).unwrap();                 // kuyruk doluysa BLOKLAR
+            tx.send(i).unwrap(); // kuyruk doluysa BLOKLAR
             println!("    [kasaci] {}. kasa bosaltildi", i);
         }
     });
-    thread::sleep(Duration::from_millis(20));    // surucu gec geliyor
+    thread::sleep(Duration::from_millis(20)); // surucu gec geliyor
     for canta in rx {
         println!("    [surucu] {}. canta araca kondu", canta);
         thread::sleep(Duration::from_millis(3));

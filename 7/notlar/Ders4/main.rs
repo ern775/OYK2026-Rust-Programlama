@@ -9,7 +9,7 @@ use std::mem::size_of_val;
 #[derive(Debug, Clone)]
 struct Lead {
     note: String,
-    weight: u8,          // 0-10 arasi guvenilirlik
+    weight: u8, // 0-10 arasi guvenilirlik
 }
 
 // ---------------------------------------------------------------
@@ -20,7 +20,11 @@ fn filter_leads<F>(leads: &[Lead], rule: F) -> Vec<String>
 where
     F: Fn(&Lead) -> bool,
 {
-    leads.iter().filter(|l| rule(l)).map(|l| l.note.clone()).collect()
+    leads
+        .iter()
+        .filter(|l| rule(l))
+        .map(|l| l.note.clone())
+        .collect()
 }
 
 // FnMut: kural cagrildikca kendi durumunu degistirebiliyor
@@ -71,26 +75,42 @@ fn count_matching(leads: &[Lead], rule: fn(&Lead) -> bool) -> usize {
 
 fn main() {
     let leads = vec![
-        Lead { note: String::from("otoparktaki bilet"), weight: 8 },
-        Lead { note: String::from("isimsiz telefon"), weight: 3 },
-        Lead { note: String::from("plaka kaydi"), weight: 9 },
-        Lead { note: String::from("dedikodu"), weight: 2 },
+        Lead {
+            note: String::from("otoparktaki bilet"),
+            weight: 8,
+        },
+        Lead {
+            note: String::from("isimsiz telefon"),
+            weight: 3,
+        },
+        Lead {
+            note: String::from("plaka kaydi"),
+            weight: 9,
+        },
+        Lead {
+            note: String::from("dedikodu"),
+            weight: 2,
+        },
     ];
 
     println!("-- 1) closure cevreyi yakalar --");
-    let threshold = 6;                                  // buronun o anki esigi
-    let is_strong = |l: &Lead| l.weight >= threshold;   // threshold YAKALANDI
+    let threshold = 6; // buronun o anki esigi
+    let is_strong = |l: &Lead| l.weight >= threshold; // threshold YAKALANDI
     // Ayni seyi fonksiyonla yapamayiz - fonksiyonun cevresi yoktur:
     // fn strong_fn(l: &Lead) -> bool { l.weight >= threshold }
     //   E0434: fn'in cevresi yoktur; ya parametre alir ya sabit kullanir.
-    println!("  esik {} -> guclu ipuclari: {:?}", threshold, filter_leads(&leads, is_strong));
+    println!(
+        "  esik {} -> guclu ipuclari: {:?}",
+        threshold,
+        filter_leads(&leads, is_strong)
+    );
 
     println!("-- 2) uc yakalama sekli --");
     // Fn: sadece OKUYOR -> paylasimli odunc
     let banned = String::from("dedikodu");
     let allowed = |l: &Lead| l.note != banned;
     println!("  Fn      : {:?}", filter_leads(&leads, allowed));
-    println!("  banned hala kullanilabilir: {}", banned);   // odunc alindi, tasinmadi
+    println!("  banned hala kullanilabilir: {}", banned); // odunc alindi, tasinmadi
 
     // FnMut: DEGISTIRIYOR -> degisebilir odunc
     let mut seen = 0;
@@ -99,7 +119,10 @@ fn main() {
         seen += 1;
         total_weight += l.weight as u32;
     });
-    println!("  FnMut   : {} ipucu, toplam agirlik {}", seen, total_weight);
+    println!(
+        "  FnMut   : {} ipucu, toplam agirlik {}",
+        seen, total_weight
+    );
 
     // FnOnce: SAHIPLENIYOR -> bir kez cagrilabilir
     let case_code = String::from("47-B");
@@ -112,20 +135,23 @@ fn main() {
     let detective = String::from("Alvarez");
     let sign = move || format!("imza: {}", detective);
     println!("  {}", sign());
-    println!("  {}", sign());          // move ama HALA Fn: iki kez cagrilabiliyor
+    println!("  {}", sign()); // move ama HALA Fn: iki kez cagrilabiliyor
     // println!("{}", detective);
     //   E0382: `detective` closure'a tasindi
     // move "nasil yakaladigini" belirler, "kac kez cagrilabilecegini" DEGIL.
 
     println!("-- 4) closure adsiz bir struct'tir --");
     let empty = || 42;
-    let small = move |x: u32| x + threshold as u32;      // threshold: u8 yakaladi
+    let small = move |x: u32| x + threshold as u32; // threshold: u8 yakaladi
     let big_note = String::from("uzun bir dosya notu");
-    let heavy = move || big_note.len();                  // String yakaladi
+    let heavy = move || big_note.len(); // String yakaladi
     println!("  yakalamayan closure : {} bayt", size_of_val(&empty));
     println!("  u8 yakalayan        : {} bayt", size_of_val(&small));
     println!("  String yakalayan    : {} bayt", size_of_val(&heavy));
-    println!("  (String = ptr+len+cap = {} bayt)", size_of_val(&String::new()));
+    println!(
+        "  (String = ptr+len+cap = {} bayt)",
+        size_of_val(&String::new())
+    );
 
     println!("-- 5) iki kural, iki bound --");
     // header_check bir String'i SAHIPLENIYOR -> FnOnce
@@ -134,16 +160,31 @@ fn main() {
     // each sadece okuyor -> Fn
     let min_weight = 5;
     let strong_enough = move |l: &Lead| l.weight >= min_weight;
-    println!("  KRG-12 dosyasi : {} ipucu", screen_batch("KRG-12", &leads, header_ok, strong_enough));
+    println!(
+        "  KRG-12 dosyasi : {} ipucu",
+        screen_batch("KRG-12", &leads, header_ok, strong_enough)
+    );
     let header_ok2 = |h: &str| h.starts_with("KRG");
-    println!("  XYZ-9 dosyasi  : {} ipucu", screen_batch("XYZ-9", &leads, header_ok2, strong_enough));
+    println!(
+        "  XYZ-9 dosyasi  : {} ipucu",
+        screen_batch("XYZ-9", &leads, header_ok2, strong_enough)
+    );
     // FnOnce en GENIS bound'dur: Fn olan bir closure da gecer, tersi gecmez.
 
     println!("-- 6) fn pointer --");
-    println!("  fonksiyon gecti     : {}", count_matching(&leads, weight_over_five));
-    println!("  yakalamayan closure : {}", count_matching(&leads, |l| l.weight > 7));
+    println!(
+        "  fonksiyon gecti     : {}",
+        count_matching(&leads, weight_over_five)
+    );
+    println!(
+        "  yakalamayan closure : {}",
+        count_matching(&leads, |l| l.weight > 7)
+    );
     // count_matching(&leads, |l| l.weight >= threshold);
     //   E0308: closures can only be coerced to `fn` types if they do not capture
     //   -> threshold yakalandigi anda artik sadece bir adres degil.
-    println!("  fn pointer boyutu   : {} bayt", size_of_val(&(weight_over_five as fn(&Lead) -> bool)));
+    println!(
+        "  fn pointer boyutu   : {} bayt",
+        size_of_val(&(weight_over_five as fn(&Lead) -> bool))
+    );
 }

@@ -48,7 +48,7 @@ fn parse_command(line: &str) -> Result<u32, RoverError> {
     //          Basarisizsa RoverError::BadDistance(arg.to_string()) dondurun.
     //          Sonra ayni satiri `?` ile yazmayi deneyin:
     //          bunun icin `impl From<std::num::ParseIntError> for RoverError` yazin.
-    let mesafe: u32 = 0;   // <- burayi degistirin
+    let mesafe: u32 = 0; // <- burayi degistirin
 
     // TODO 1c: mesafe 500'den buyukse TooFar dondurun (max: 500)
 
@@ -83,7 +83,10 @@ mod task {
 
     impl Task {
         pub fn new(name: &str) -> Task {
-            Task { name: name.to_string(), is_done: false }
+            Task {
+                name: name.to_string(),
+                is_done: false,
+            }
         }
         pub fn name(&self) -> &str {
             &self.name

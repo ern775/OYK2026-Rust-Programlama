@@ -30,7 +30,13 @@ trait Unit {
 
     fn status(&self) -> String {
         let durum = if self.is_alive() { "ayakta" } else { "dusmus" };
-        format!("{:<10} {:>4} can  {:>3} vurus  [{}]", self.name(), self.hp(), self.attack_power(), durum)
+        format!(
+            "{:<10} {:>4} can  {:>3} vurus  [{}]",
+            self.name(),
+            self.hp(),
+            self.attack_power(),
+            durum
+        )
     }
 }
 
@@ -49,7 +55,7 @@ struct Dragon {
     rage: i32,
 }
 
-struct Healer;                              // alani olmayan tip de olur
+struct Healer; // alani olmayan tip de olur
 
 // Trait metotlari ile TIPIN KENDI metotlari (inherent) bir arada yasar.
 // Bu metot trait'e ait degil, sadece Archer'da var.
@@ -60,17 +66,29 @@ impl Archer {
 }
 
 impl Unit for Archer {
-    fn name(&self) -> &str { "Archer" }
-    fn hp(&self) -> i32 { self.hp }
-    fn attack_power(&self) -> i32 { 12 }
+    fn name(&self) -> &str {
+        "Archer"
+    }
+    fn hp(&self) -> i32 {
+        self.hp
+    }
+    fn attack_power(&self) -> i32 {
+        12
+    }
     // battle_cry, is_alive, status VARSAYILAN haliyle geliyor
 }
 
 impl Unit for Knight {
-    fn name(&self) -> &str { "Knight" }
-    fn hp(&self) -> i32 { self.hp }
+    fn name(&self) -> &str {
+        "Knight"
+    }
+    fn hp(&self) -> i32 {
+        self.hp
+    }
     // zirh vurusa degil, dayanikliliga katki saglar; guc sabit
-    fn attack_power(&self) -> i32 { 18 }
+    fn attack_power(&self) -> i32 {
+        18
+    }
 
     // varsayilani EZIYORUZ
     fn battle_cry(&self) -> String {
@@ -79,9 +97,15 @@ impl Unit for Knight {
 }
 
 impl Unit for Dragon {
-    fn name(&self) -> &str { "Dragon" }
-    fn hp(&self) -> i32 { self.hp }
-    fn attack_power(&self) -> i32 { 40 + self.rage }   // ofke vurusa ekleniyor
+    fn name(&self) -> &str {
+        "Dragon"
+    }
+    fn hp(&self) -> i32 {
+        self.hp
+    }
+    fn attack_power(&self) -> i32 {
+        40 + self.rage
+    } // ofke vurusa ekleniyor
 
     fn battle_cry(&self) -> String {
         String::from("GRAAAH! Alevler yukseliyor!")
@@ -89,9 +113,15 @@ impl Unit for Dragon {
 }
 
 impl Unit for Healer {
-    fn name(&self) -> &str { "Healer" }
-    fn hp(&self) -> i32 { 60 }
-    fn attack_power(&self) -> i32 { 3 }
+    fn name(&self) -> &str {
+        "Healer"
+    }
+    fn hp(&self) -> i32 {
+        60
+    }
+    fn attack_power(&self) -> i32 {
+        3
+    }
 }
 
 // ---------------------------------------------------------------
@@ -123,15 +153,18 @@ struct Dice {
 
 impl Dice {
     fn new() -> Dice {
-        let nanos = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_nanos() as u64;
-        Dice { seed: nanos | 1 }              // tohum asla 0 olmamali
+        let nanos = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos() as u64;
+        Dice { seed: nanos | 1 } // tohum asla 0 olmamali
     }
 
     fn d6(&mut self) -> i32 {
         self.seed ^= self.seed << 13;
         self.seed ^= self.seed >> 7;
         self.seed ^= self.seed << 17;
-        (self.seed % 6) as i32 + 1            // 1..=6
+        (self.seed % 6) as i32 + 1 // 1..=6
     }
 }
 
@@ -152,12 +185,21 @@ fn duel<T: Unit>(a: &T, b: &T) -> String {
     } else {
         (b.name(), b.attack_power(), roll_b, a.attack_power(), roll_a)
     };
-    format!("{} kazandi ({}+{} zar vs {}+{} zar)", winner, wp, wr, lp, lr)
+    format!(
+        "{} kazandi ({}+{} zar vs {}+{} zar)",
+        winner, wp, wr, lp, lr
+    )
 }
 
 // impl Trait: iki arguman FARKLI tip olabilir (karma savas)
 fn skirmish(a: &impl Unit, b: &impl Unit) -> String {
-    format!("{} ({}) vs {} ({})", a.name(), a.attack_power(), b.name(), b.attack_power())
+    format!(
+        "{} ({}) vs {} ({})",
+        a.name(),
+        a.attack_power(),
+        b.name(),
+        b.attack_power()
+    )
 }
 
 // ---------------------------------------------------------------
@@ -169,9 +211,15 @@ struct Goblin {
 }
 
 impl Unit for Goblin {
-    fn name(&self) -> &str { "Goblin" }
-    fn hp(&self) -> i32 { self.hp }
-    fn attack_power(&self) -> i32 { 5 }
+    fn name(&self) -> &str {
+        "Goblin"
+    }
+    fn hp(&self) -> i32 {
+        self.hp
+    }
+    fn attack_power(&self) -> i32 {
+        5
+    }
 }
 
 fn debug_spawn<T: Unit + Debug>(u: &T) {
@@ -217,18 +265,18 @@ fn main() {
     let knight = Knight { hp: 140, armor: 25 };
     let dragon = Dragon { hp: 500, rage: 15 };
     let healer = Healer;
-    let goblin = Goblin { hp: 0 };          // dusmus birim
+    let goblin = Goblin { hp: 0 }; // dusmus birim
 
     println!("-- varsayilan metot vs ezilmis metot --");
-    println!("  {}", archer.battle_cry());     // varsayilan gövde
-    println!("  {}", healer.battle_cry());   // varsayilan gövde
-    println!("  {}", knight.battle_cry());  // EZILMIS
-    println!("  {}", dragon.battle_cry());  // EZILMIS
+    println!("  {}", archer.battle_cry()); // varsayilan gövde
+    println!("  {}", healer.battle_cry()); // varsayilan gövde
+    println!("  {}", knight.battle_cry()); // EZILMIS
+    println!("  {}", dragon.battle_cry()); // EZILMIS
 
     println!("-- varsayilan metot zorunlu metodu cagiriyor --");
     println!("  {}", archer.status());
     println!("  {}", dragon.status());
-    println!("  {}", goblin.status());       // hp 0 -> is_alive() false
+    println!("  {}", goblin.status()); // hp 0 -> is_alive() false
 
     println!("-- trait'e ait olmayan, tipin kendi metodu --");
     println!("  {}", archer.quiver());
@@ -256,8 +304,10 @@ fn main() {
     println!("  {}", starter.status());
 
     println!("-- ordu gucu --");
-    let total = archer.attack_power() + knight.attack_power()
-        + dragon.attack_power() + healer.attack_power();
+    let total = archer.attack_power()
+        + knight.attack_power()
+        + dragon.attack_power()
+        + healer.attack_power();
     println!("  toplam vurus: {}", total);
 
     // DUVAR: dort birimi TEK BIR orduya (Vec) koyamiyoruz.

@@ -24,10 +24,10 @@ fn main() {
     }
 
     println!("=== TELEMETRI RAPORU ===");
-    println!("{}", summary(&olcumler));       // report::summary
+    println!("{}", summary(&olcumler)); // report::summary
     println!("atlanan satir: {}", hatali);
     println!();
-    print!("{}", table(&olcumler));           // report::table
+    print!("{}", table(&olcumler)); // report::table
 
     // Modulun ICINDEKI her sey acik degil: asagidaki satir DERLENMEZ.
     // ders3::report::summary::internal_label();

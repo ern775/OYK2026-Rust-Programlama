@@ -44,7 +44,10 @@ fn parse_temperature(line: &str) -> Result<f64, TelemetryError> {
 
     // Mars yuzeyi: -125 ile 20 C arasi
     if sayi < -125.0 || sayi > 20.0 {
-        return Err(TelemetryError::OutOfRange { field: "sicaklik", value: sayi });
+        return Err(TelemetryError::OutOfRange {
+            field: "sicaklik",
+            value: sayi,
+        });
     }
 
     Ok(sayi)
@@ -76,7 +79,13 @@ fn parse_temperature(line: &str) -> Result<f64, TelemetryError> {
 // }
 
 fn main() {
-    let satirlar = ["sicaklik=-63.2", "sicaklik=abc", "sicaklik=999", "nem=40", "   "];
+    let satirlar = [
+        "sicaklik=-63.2",
+        "sicaklik=abc",
+        "sicaklik=999",
+        "nem=40",
+        "   ",
+    ];
 
     // match ile: cagiran her hatayi AYIRT EDEBILIYOR
     for s in satirlar {
@@ -118,14 +127,26 @@ fn main() {
 
     // 3) unwrap_or(varsayilan)  -> Err ise varsayilani verir, PANIK YOK.
     //    "hata olursa su degeri kullan" diyebiliyorsaniz dogru secim.
-    println!("{:<18}{}", "unwrap_or", parse_temperature("sicaklik=abc").unwrap_or(0.0));
+    println!(
+        "{:<18}{}",
+        "unwrap_or",
+        parse_temperature("sicaklik=abc").unwrap_or(0.0)
+    );
 
     // 4) unwrap_or_else(|e| ...)  -> varsayilani HESAPLAYARAK uretir.
     //    Varsayilan pahaliysa ya da hataya bakip karar verecekseniz.
-    println!("{:<18}{}", "unwrap_or_else", parse_temperature("sicaklik=abc").unwrap_or_else(|_| -999.0));
+    println!(
+        "{:<18}{}",
+        "unwrap_or_else",
+        parse_temperature("sicaklik=abc").unwrap_or_else(|_| -999.0)
+    );
 
     // 5) unwrap_or_default()  -> tipin sifir degerini verir (f64 icin 0.0)
-    println!("{:<18}{}", "unwrap_or_default", parse_temperature("sicaklik=abc").unwrap_or_default());
+    println!(
+        "{:<18}{}",
+        "unwrap_or_default",
+        parse_temperature("sicaklik=abc").unwrap_or_default()
+    );
 
     // 6) match  -> iki durumu da ELLE ele alirsiniz. En acik, en uzun yol.
     let secim = match parse_temperature("sicaklik=abc") {
@@ -146,13 +167,25 @@ fn main() {
     // map BASARI degerini donusturur, Err tarafina dokunmaz
     // (|c| ... bir closure: adi olmayan kucuk bir fonksiyon)
     let fahrenheit = parse_temperature("sicaklik=-40").map(|c| c * 9.0 / 5.0 + 32.0);
-    println!("{:<18}{:?}   (-40 C = -40 F, tek kesisme noktasi)", "map", fahrenheit);
+    println!(
+        "{:<18}{:?}   (-40 C = -40 F, tek kesisme noktasi)",
+        "map", fahrenheit
+    );
     // Err ise map hicbir sey yapmaz, hata aynen gecer
-    println!("{:<18}{:?}   (Err ise map hicbir sey yapmaz)", "map + Err", parse_temperature("sicaklik=abc").map(|c| c * 2.0).is_err());
+    println!(
+        "{:<18}{:?}   (Err ise map hicbir sey yapmaz)",
+        "map + Err",
+        parse_temperature("sicaklik=abc").map(|c| c * 2.0).is_err()
+    );
 
     // Option'da da ayni map var
     let bos_olcum: Option<f64> = None;
-    println!("{:<18}{:?} {:?}", "Option map", Some(3.0).map(|c: f64| c * 2.0), bos_olcum.map(|c| c * 2.0));
+    println!(
+        "{:<18}{:?} {:?}",
+        "Option map",
+        Some(3.0).map(|c: f64| c * 2.0),
+        bos_olcum.map(|c| c * 2.0)
+    );
 
     // map_err hata tipini donusturur, Ok tarafina dokunmaz
     let metne: Result<f64, String> =
@@ -174,8 +207,8 @@ fn main() {
     println!("{:<18}{:?}", "ok_or_else", r2);
 
     // expect: mesaj, "burada asla hata olamaz" varsayiminin BELGESIDIR
-    let kesin = parse_temperature("sicaklik=0")
-        .expect("sabit metin gecerli, ayristirma basarisiz olamaz");
+    let kesin =
+        parse_temperature("sicaklik=0").expect("sabit metin gecerli, ayristirma basarisiz olamaz");
     println!("{:<18}{}", "expect", kesin);
 
     // unwrap yerine expect yazin: panik mesaji sizin cumleniz olur
@@ -186,6 +219,10 @@ fn main() {
     //   unreachable!()      "buraya asla gelinmez"
     //   todo!()             derlenir, cagrilirsa panikler - iskelet yazarken ideal
     //   assert!(kosul)      kosul bozulursa panikler
-    assert!(kesin >= -125.0 && kesin <= 20.0, "sicaklik araligin disinda: {}", kesin);
+    assert!(
+        kesin >= -125.0 && kesin <= 20.0,
+        "sicaklik araligin disinda: {}",
+        kesin
+    );
     println!("assert gecti");
 }

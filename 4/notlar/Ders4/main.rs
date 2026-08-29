@@ -50,7 +50,7 @@ fn main() {
         let yorum = match zar {
             1 => "en kotu",
             2..=4 => "orta",
-            5 | 6 => "iyi",             // | ile coklu desen
+            5 | 6 => "iyi", // | ile coklu desen
             _ => "zar boyle olmaz",
         };
         print!("{}:{} ", zar, yorum);
@@ -137,7 +137,10 @@ fn main() {
     // match hem "hangisi" sorusunu cevaplar hem icindekini cikarir
     let sekiller = vec![
         Shape::Circle { r: 1.5 },
-        Shape::Rectangle { width: 2.0, height: 5.0 },
+        Shape::Rectangle {
+            width: 2.0,
+            height: 5.0,
+        },
         Shape::Triangle(3.0, 4.0, 5.0),
     ];
     for s in &sekiller {
@@ -171,7 +174,11 @@ fn main() {
     println!();
 
     // matches! - sadece "esliyor mu", bool doner
-    println!("{} {}", matches!(isik, TrafficLight::Yellow), matches!(isik, TrafficLight::Green));
+    println!(
+        "{} {}",
+        matches!(isik, TrafficLight::Yellow),
+        matches!(isik, TrafficLight::Green)
+    );
 
     // DESENDE SAHIPLIK - & ile odunc, & olmadan tasima
     let sahipli = Some(String::from("veri"));
@@ -185,7 +192,7 @@ fn main() {
         Some(ref s) => println!("bu sefer tasindi: {}", s),
         None => println!("bos"),
     }
-    println!("{:?}", sahipli);       // E0382 - tasindi
+    println!("{:?}", sahipli); // E0382 - tasindi
 
     // match bir IFADEDIR - tum kollarin tipi ayni olmali
     let sure = match TrafficLight::Red {

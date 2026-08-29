@@ -31,7 +31,7 @@ fn main() {
 // Para f64 ile tutulmaz. En kucuk birim "santi-kredi", i64 tutuyoruz.
 // ===========================================================================
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Default)]
-struct Credits(i64);           // santi-kredi cinsinden
+struct Credits(i64); // santi-kredi cinsinden
 
 impl Credits {
     // ORNEK: iki farkli kurucu
@@ -136,10 +136,19 @@ fn lab_2_citizen() {
         home_world: String::from("Terra"),
         income: Credits::from_credits(2500.0),
     };
-    let vulcanoid = Vulcanoid { designation: String::from("V-77"), logic_score: 940 };
-    let drone = SiliconDrone { serial: 88_213, active: true };
+    let vulcanoid = Vulcanoid {
+        designation: String::from("V-77"),
+        logic_score: 940,
+    };
+    let drone = SiliconDrone {
+        serial: 88_213,
+        active: true,
+    };
 
-    println!("  kayitlar hazir: {} / {} / {}", human.name, vulcanoid.designation, drone.serial);
+    println!(
+        "  kayitlar hazir: {} / {} / {}",
+        human.name, vulcanoid.designation, drone.serial
+    );
     // TODO: 2a-2b bitince passport() ciktilarini yazdirin
 }
 
@@ -208,11 +217,17 @@ struct WarpCore;
 struct SolarSail;
 
 #[derive(Debug)]
-struct Xenon { grams: u32 }
+struct Xenon {
+    grams: u32,
+}
 #[derive(Debug)]
-struct Antimatter { micrograms: u32 }
+struct Antimatter {
+    micrograms: u32,
+}
 #[derive(Debug)]
-struct Photons { lumens: u32 }
+struct Photons {
+    lumens: u32,
+}
 
 // TODO 5a: `trait Engine` tanimlayin:
 //          type Fuel;

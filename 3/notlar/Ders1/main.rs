@@ -29,7 +29,7 @@ fn main() {
     // GERCEK COZUM - odunc al
     let s = String::from("merhaba dunya");
     println!("{}", uzunluk_odunc(&s));
-    println!("{}", s);                  // s hala bizim
+    println!("{}", s); // s hala bizim
 
     // referans ucuzdur - bir adres kadar
     println!("&String = {} bayt", std::mem::size_of::<&String>());
@@ -43,8 +43,8 @@ fn main() {
     let x = 5;
     let r = &x;
     println!("{} {}", r, *r);
-    println!("{}", *r + 1);             // aritmetikte * gerekli
-    println!("{}", *r == 5);            // karsilastirmada otomatik da cozulur
+    println!("{}", *r + 1); // aritmetikte * gerekli
+    println!("{}", *r == 5); // karsilastirmada otomatik da cozulur
 
     // &mut ile odunc alip degistir
     let mut m = String::from("merhaba");
@@ -87,7 +87,12 @@ fn main() {
     // ayni kural listelerde: &[T] yazarsan Vec, dizi ve dilim ucu de gecer
     let vek = vec![3, 1, 4];
     let diz = [3, 1, 4];
-    println!("{} {} {}", topla_dilim(&vek), topla_dilim(&diz), topla_dilim(&vek[1..3]));
+    println!(
+        "{} {} {}",
+        topla_dilim(&vek),
+        topla_dilim(&diz),
+        topla_dilim(&vek[1..3])
+    );
     // fn topla_dilim(v: &Vec<i32>) yazsaydik dizi ve dilim gecmezdi
 
     // SAHIPLIGI ALAN FONKSIYON DEGERI DE DUSURUR
@@ -169,7 +174,7 @@ fn ekle(s: &mut String) {
 }
 
 fn ikiye_katla(n: &mut i32) {
-    *n *= 2;                            // hedefi degistirmek icin * gerekli
+    *n *= 2; // hedefi degistirmek icin * gerekli
 }
 
 fn sirala(v: &mut Vec<i32>) {

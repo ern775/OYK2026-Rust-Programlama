@@ -19,7 +19,10 @@ struct Rover {
 // declarative makro: desen -> sablon
 macro_rules! rover {
     ($ad:expr, $m:expr) => {
-        Rover { ad: String::from($ad), mesafe_m: $m }
+        Rover {
+            ad: String::from($ad),
+            mesafe_m: $m,
+        }
     };
 }
 

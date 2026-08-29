@@ -24,13 +24,13 @@ type_alias!(u32 => Counter);
 // --- 3) HIJYEN: makro icindeki isim disariyi kirletmez ---
 macro_rules! increment {
     ($x:ident) => {
-        $x += 1;                 // ismi DISARIDAN aldik, o yuzden calisir
+        $x += 1; // ismi DISARIDAN aldik, o yuzden calisir
     };
 }
 
 macro_rules! no_pollution {
     () => {
-        let x = 9999;            // bu x, disaridaki x DEGILDIR
+        let x = 9999; // bu x, disaridaki x DEGILDIR
         let _ = x;
     };
 }
@@ -39,7 +39,9 @@ macro_rules! no_pollution {
 // expr yakalamasi metin degil, AYRISTIRILMIS TEK BIR IFADE dugumu yakalar.
 // Yerine konurken butunlugu korunur.
 macro_rules! kare_expr {
-    ($x:expr) => { $x * $x };            // (2+3) * (2+3) = 25
+    ($x:expr) => {
+        $x * $x
+    }; // (2+3) * (2+3) = 25
 }
 // tt token seviyesinde yakalar - iste tuzak burada geri geliyor
 macro_rules! kare_tt {
@@ -96,9 +98,9 @@ macro_rules! print_and_eval {
 fn main() {
     hello!();
     hello!("Mars");
-    hello!["kose parantez de olur"];      // ( ) [ ] { } ucu de aynidir
+    hello!["kose parantez de olur"]; // ( ) [ ] { } ucu de aynidir
 
-    let sayac: Counter = 42;                // makronun urettigi tip takma adi
+    let sayac: Counter = 42; // makronun urettigi tip takma adi
     println!("Counter = {}", sayac);
 
     // hijyen
@@ -109,15 +111,24 @@ fn main() {
     println!("hijyen: disaridaki x = {} (makro icindeki 9999 degil)", x);
 
     // parantez tuzagi: ayni ifade, iki farkli yakalama
-    println!("kare_expr!(2 + 3) = {}   <- expr butunlugu korur", kare_expr!(2 + 3));
-    println!("kare_tt!(2 + 3)   = {}   <- tt token kopyalar, C'deki tuzak", kare_tt!(2 + 3));
+    println!(
+        "kare_expr!(2 + 3) = {}   <- expr butunlugu korur",
+        kare_expr!(2 + 3)
+    );
+    println!(
+        "kare_tt!(2 + 3)   = {}   <- tt token kopyalar, C'deki tuzak",
+        kare_tt!(2 + 3)
+    );
 
     // kendi vec makromuz
     let bos: Vec<u32> = avec![];
     let sayilar = avec![1, 2, 3];
     let sondaki_virgul = avec![1, 2, 3,];
     let tekrarli = avec![7; 4];
-    println!("{:?} {:?} {:?} {:?}", bos, sayilar, sondaki_virgul, tekrarli);
+    println!(
+        "{:?} {:?} {:?} {:?}",
+        bos, sayilar, sondaki_virgul, tekrarli
+    );
 
     // makroyla uretilen impl'ler
     println!("u8::max_value  = {}", <u8 as MaxValue>::max_value());
@@ -126,7 +137,10 @@ fn main() {
     // TT muncher - tt en ilkel yapitasi: tek token ya da parantezli grup
     println!("token_say!()      = {}", token_say!());
     println!("token_say!(a b c) = {}", token_say!(a b c));
-    println!("token_say!(1 + 2) = {}   (uc token: 1, +, 2)", token_say!(1 + 2));
+    println!(
+        "token_say!(1 + 2) = {}   (uc token: 1, +, 2)",
+        token_say!(1 + 2)
+    );
 
     // stringify
     print_and_eval!(2 + 3 * 4);
@@ -162,7 +176,7 @@ mod tests {
 
     #[test]
     fn paren_trap() {
-        assert_eq!(kare_expr!(2 + 3), 25);   // expr: ifade butun kalir
-        assert_eq!(kare_tt!(2 + 3), 11);     // tt: token kopyalanir, tuzak geri gelir
+        assert_eq!(kare_expr!(2 + 3), 25); // expr: ifade butun kalir
+        assert_eq!(kare_tt!(2 + 3), 11); // tt: token kopyalanir, tuzak geri gelir
     }
 }

@@ -21,7 +21,12 @@ trait Boss: Unit + Display {
     // Supertrait'in faydasi: varsayilan gövdede self'i {} ile yazabiliyoruz,
     // cunku Display oldugu GARANTI. Unit metotlarini da cagirabiliyoruz.
     fn intro(&self) -> String {
-        format!("[FAZ {}] {} sahneye cikti ({} can)", self.phase(), self, self.hp())
+        format!(
+            "[FAZ {}] {} sahneye cikti ({} can)",
+            self.phase(),
+            self,
+            self.hp()
+        )
     }
 }
 
@@ -31,8 +36,12 @@ struct Dragon {
 }
 
 impl Unit for Dragon {
-    fn name(&self) -> &str { "Dragon" }
-    fn hp(&self) -> i32 { self.hp }
+    fn name(&self) -> &str {
+        "Dragon"
+    }
+    fn hp(&self) -> i32 {
+        self.hp
+    }
 }
 
 impl Display for Dragon {
@@ -48,8 +57,10 @@ impl Boss for Dragon {
 }
 
 // Display OLMAYAN bir tipe Boss uygulanamaz:
-#[allow(dead_code)]                 // sadece asagidaki yorumlu ornek icin duruyor
-struct Slime { hp: i32 }
+#[allow(dead_code)] // sadece asagidaki yorumlu ornek icin duruyor
+struct Slime {
+    hp: i32,
+}
 
 // impl Unit for Slime { ... }
 // impl Boss for Slime { fn phase(&self) -> u8 { 1 } }
@@ -97,7 +108,9 @@ impl Display for Party {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Birlik[")?;
         for (i, u) in self.0.iter().enumerate() {
-            if i > 0 { write!(f, " + ")?; }
+            if i > 0 {
+                write!(f, " + ")?;
+            }
             write!(f, "{}", u)?;
         }
         write!(f, "]")
@@ -126,7 +139,7 @@ impl<T: Display> Taunt for T {
 // 5) SEALED TRAIT: disaridan implemente edilemeyen trait
 // ---------------------------------------------------------------
 mod sealed {
-    pub trait Seal {}          // bu modulun disina cikmiyor
+    pub trait Seal {} // bu modulun disina cikmiyor
 }
 
 // Disaridaki bir crate sealed::Seal'e erisemez, dolayisiyla DamageType'i
@@ -138,7 +151,9 @@ pub trait DamageType: sealed::Seal {
 struct Fire;
 impl sealed::Seal for Fire {}
 impl DamageType for Fire {
-    fn multiplier(&self) -> f64 { 1.5 }
+    fn multiplier(&self) -> f64 {
+        1.5
+    }
 }
 
 // ---------------------------------------------------------------
@@ -150,23 +165,30 @@ trait Summon {
 }
 
 impl Summon for Dragon {
-    fn summon() -> Dragon { Dragon { hp: 500, rage: 15 } }
+    fn summon() -> Dragon {
+        Dragon { hp: 500, rage: 15 }
+    }
 }
 
 // Summon dyn OLAMAZ - denemesi main icinde, yorumda duruyor.
 
 // Cozum: sorunlu metodu vtable'in DISINDA birak.
 trait Summonable {
-    fn title(&self) -> String;                    // vtable'a girer
+    fn title(&self) -> String; // vtable'a girer
 
-    fn summon() -> Self                           // vtable'a GIRMEZ
+    fn summon() -> Self
+    // vtable'a GIRMEZ
     where
         Self: Sized;
 }
 
 impl Summonable for Dragon {
-    fn title(&self) -> String { format!("{} cagrildi", self.name()) }
-    fn summon() -> Dragon { Dragon { hp: 400, rage: 20 } }
+    fn title(&self) -> String {
+        format!("{} cagrildi", self.name())
+    }
+    fn summon() -> Dragon {
+        Dragon { hp: 400, rage: 20 }
+    }
 }
 
 // Boss nesne guvenli: tum metotlar &self aliyor, Self dondurmuyor.
@@ -182,7 +204,7 @@ fn main() {
 
     println!("-- supertrait --");
     println!("  {}", dragon.intro());
-    println!("  {}", wounded.intro());       // can dustu -> faz 2
+    println!("  {}", wounded.intro()); // can dustu -> faz 2
 
     println!("-- kendi trait'imiz, BASKASININ tipinde --");
     println!("  {}", 55u32.describe());
@@ -216,7 +238,10 @@ fn main() {
     // summoned.summon();
     //   E0599: no method named `summon` found for struct `Box<dyn Summonable>`
     //   -> where Self: Sized ile isaretledigimiz metot vtable'a girmedi
-    println!("  somut tip uzerinden: {}", <Dragon as Summon>::summon().name());
+    println!(
+        "  somut tip uzerinden: {}",
+        <Dragon as Summon>::summon().name()
+    );
 
     let bosses: Vec<Box<dyn Boss>> = vec![
         Box::new(Dragon { hp: 500, rage: 15 }),

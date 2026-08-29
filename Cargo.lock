@@ -83,6 +83,10 @@ name = "day7"
 version = "0.1.0"
 
 [[package]]
+name = "day8"
+version = "0.1.0"
+
+[[package]]
 name = "ders3"
 version = "0.1.0"
 

@@ -4,7 +4,7 @@ fn main() {
     println!("{:?}", r);
 
     let a: &str = "merhaba";
-    let b: String = a.to_string();      // heap'e kopyala, sahiplen
-    let c: &str = &b;                   // geri pencere ac
+    let b: String = a.to_string(); // heap'e kopyala, sahiplen
+    let c: &str = &b; // geri pencere ac
     println!("{} {} {}", a, b, c);
 }

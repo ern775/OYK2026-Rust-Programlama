@@ -6,20 +6,32 @@
 use std::fmt;
 
 #[derive(Debug, Clone, Copy)]
-struct Arrow { count: u32 }
+struct Arrow {
+    count: u32,
+}
 #[derive(Debug, Clone, Copy)]
-struct Bullet { count: u32 }
+struct Bullet {
+    count: u32,
+}
 #[derive(Debug, Clone, Copy)]
-struct ManaCharge { amount: u32 }
+struct ManaCharge {
+    amount: u32,
+}
 
 impl fmt::Display for Arrow {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{} ok", self.count) }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} ok", self.count)
+    }
 }
 impl fmt::Display for Bullet {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{} mermi", self.count) }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} mermi", self.count)
+    }
 }
 impl fmt::Display for ManaCharge {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result { write!(f, "{} mana yuku", self.amount) }
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} mana yuku", self.amount)
+    }
 }
 
 struct Bow;
@@ -32,23 +44,29 @@ struct Staff;
 // Yay ok atar. Tufek mermi atar. Asa mana yakar.
 // Her silahin cephane tipi TEKTIR -> associated type.
 trait Weapon {
-    type Ammo;                              // trait'in ICINDE tanimli tip
+    type Ammo; // trait'in ICINDE tanimli tip
     fn reload(&self) -> Self::Ammo;
 }
 
 impl Weapon for Bow {
-    type Ammo = Arrow;                      // Bow icin cevap: Arrow
-    fn reload(&self) -> Arrow { Arrow { count: 30 } }
+    type Ammo = Arrow; // Bow icin cevap: Arrow
+    fn reload(&self) -> Arrow {
+        Arrow { count: 30 }
+    }
 }
 
 impl Weapon for Musket {
-    type Ammo = Bullet;                     // Musket icin cevap: Bullet
-    fn reload(&self) -> Bullet { Bullet { count: 6 } }
+    type Ammo = Bullet; // Musket icin cevap: Bullet
+    fn reload(&self) -> Bullet {
+        Bullet { count: 6 }
+    }
 }
 
 impl Weapon for Staff {
     type Ammo = ManaCharge;
-    fn reload(&self) -> ManaCharge { ManaCharge { amount: 100 } }
+    fn reload(&self) -> ManaCharge {
+        ManaCharge { amount: 100 }
+    }
 }
 
 // Ayni tipe IKINCI kez implemente edilemez:
@@ -60,14 +78,16 @@ struct Crossbow;
 
 impl Weapon for Crossbow {
     type Ammo = Arrow;
-    fn reload(&self) -> Arrow { Arrow { count: 10 } }
+    fn reload(&self) -> Arrow {
+        Arrow { count: 10 }
+    }
 }
 
 // Associated type'i bound icinde kullanmak:
 fn show_ammo<W>(w: &W)
 where
     W: Weapon,
-    W::Ammo: fmt::Display,                  // "cephane tipi yazdirilabilir olsun"
+    W::Ammo: fmt::Display, // "cephane tipi yazdirilabilir olsun"
 {
     println!("  doldurdu: {}", w.reload());
 }
@@ -76,11 +96,17 @@ where
 // 2) GENERIC PARAMETRE: "ayni tip icin BIRDEN COK cevap"
 // ---------------------------------------------------------------
 #[derive(Debug)]
-struct Sword { sharpness: u32 }
+struct Sword {
+    sharpness: u32,
+}
 #[derive(Debug)]
-struct Shield { defense: u32 }
+struct Shield {
+    defense: u32,
+}
 
-struct Iron { kg: u32 }
+struct Iron {
+    kg: u32,
+}
 
 // Demirden HEM kilic HEM kalkan yapilabilir: cevap birden fazla -> generic.
 trait Craft<T> {
@@ -88,11 +114,20 @@ trait Craft<T> {
 }
 
 impl Craft<Sword> for Iron {
-    fn craft(&self) -> Sword { Sword { sharpness: self.kg * 3 } }
+    fn craft(&self) -> Sword {
+        Sword {
+            sharpness: self.kg * 3,
+        }
+    }
 }
 
-impl Craft<Shield> for Iron {               // AYNI tip, IKINCI impl - generic sayesinde
-    fn craft(&self) -> Shield { Shield { defense: self.kg * 5 } }
+impl Craft<Shield> for Iron {
+    // AYNI tip, IKINCI impl - generic sayesinde
+    fn craft(&self) -> Shield {
+        Shield {
+            defense: self.kg * 5,
+        }
+    }
 }
 
 // ---------------------------------------------------------------
@@ -109,13 +144,22 @@ impl Craft<Shield> for Iron {               // AYNI tip, IKINCI impl - generic s
 use std::ops::Add;
 
 impl Add for Arrow {
-    type Output = Arrow;                    // Arrow + Arrow = Arrow, tek cevap
-    fn add(self, o: Arrow) -> Arrow { Arrow { count: self.count + o.count } }
+    type Output = Arrow; // Arrow + Arrow = Arrow, tek cevap
+    fn add(self, o: Arrow) -> Arrow {
+        Arrow {
+            count: self.count + o.count,
+        }
+    }
 }
 
-impl Add<u32> for Arrow {                   // Arrow + u32 de tanimlanabilir
+impl Add<u32> for Arrow {
+    // Arrow + u32 de tanimlanabilir
     type Output = Arrow;
-    fn add(self, o: u32) -> Arrow { Arrow { count: self.count + o } }
+    fn add(self, o: u32) -> Arrow {
+        Arrow {
+            count: self.count + o,
+        }
+    }
 }
 
 fn main() {
@@ -134,10 +178,13 @@ fn main() {
 
     println!("-- generic parametre: ayni girdiden iki urun --");
     let iron = Iron { kg: 4 };
-    let sword: Sword = iron.craft();         // hangi impl? donus tipi soyluyor
+    let sword: Sword = iron.craft(); // hangi impl? donus tipi soyluyor
     let shield: Shield = iron.craft();
     println!("  {:?} / {:?}", sword, shield);
-    println!("  keskinlik {} | savunma {}", sword.sharpness, shield.defense);
+    println!(
+        "  keskinlik {} | savunma {}",
+        sword.sharpness, shield.defense
+    );
     // let x = iron.craft();
     //   E0283: type annotations needed - IKI impl de uyuyor, derleyici secemez
     //   (E0282 "hic bilgi yok" demek; E0283 "birden fazla aday var" demek)
@@ -150,11 +197,8 @@ fn main() {
     // let w: Box<dyn Weapon> = Box::new(Bow);
     //   E0191: the value of the associated type `Ammo` must be specified
     //   dyn derken somut tipi unutuyoruz; Ammo'nun ne oldugu yazilmali.
-    let arsenal: Vec<Box<dyn Weapon<Ammo = Arrow>>> = vec![
-        Box::new(Bow), 
-        Box::new(Crossbow)
-    ];
-    
+    let arsenal: Vec<Box<dyn Weapon<Ammo = Arrow>>> = vec![Box::new(Bow), Box::new(Crossbow)];
+
     for w in &arsenal {
         println!("  ok deposu: {}", w.reload());
     }

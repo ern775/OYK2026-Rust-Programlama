@@ -27,7 +27,7 @@ struct Planet {
 impl Point {
     // associated function - self ALMAZ, Tip::fonksiyon() ile cagrilir
     fn new(x: f64, y: f64) -> Point {
-        Point { x, y }                  // field init shorthand: x: x yazmaya gerek yok
+        Point { x, y } // field init shorthand: x: x yazmaya gerek yok
     }
 
     fn origin() -> Point {
@@ -59,7 +59,12 @@ impl Point {
 
 impl Planet {
     fn new(name: &str, radius_km: f64, moons: u32, gravity: f64) -> Planet {
-        Planet { name: name.to_string(), radius_km, moons, gravity }
+        Planet {
+            name: name.to_string(),
+            radius_km,
+            moons,
+            gravity,
+        }
     }
 
     fn weight(&self, kilo: f64) -> f64 {
@@ -87,7 +92,7 @@ fn main() {
     // alan degistirmek icin TUM struct mut olmali - alan bazli mut yok
     let mut hareketli = Point::new(0.0, 0.0);
     hareketli.x = 5.0;
-    hareketli.translate(1.0, 2.0);          // &mut self
+    hareketli.translate(1.0, 2.0); // &mut self
     println!("({}, {})", hareketli.x, hareketli.y);
 
     // &self metotlari - nesne bizde kalir
@@ -106,8 +111,13 @@ fn main() {
     let jupiter = Planet::new("Jupiter", 69911.0, 95, 2.53);
 
     for g in [&dunya, &mars, &jupiter] {
-        println!("{:<8} yaricap={:>8} km  uydu={:<3} 70 kg -> {:.1} kg",
-            g.name, g.radius_km, g.moons, g.weight(70.0));
+        println!(
+            "{:<8} yaricap={:>8} km  uydu={:<3} 70 kg -> {:.1} kg",
+            g.name,
+            g.radius_km,
+            g.moons,
+            g.weight(70.0)
+        );
     }
 
     // &mut self ile alan guncelleme
@@ -117,10 +127,13 @@ fn main() {
 
     // struct update syntax - yazilmayan alanlar digerinden ALINIR
     let ikiz = Planet { moons: 5, ..dunya };
-    println!("ikiz: {} uydu={} yercekimi={}", ikiz.name, ikiz.moons, ikiz.gravity);
+    println!(
+        "ikiz: {} uydu={} yercekimi={}",
+        ikiz.name, ikiz.moons, ikiz.gravity
+    );
 
     // dunya artik KISMEN TASINMIS. Uc ayri durum:
-    println!("{} {}", dunya.radius_km, dunya.moons);  // 1) Copy alanlar: calisir
+    println!("{} {}", dunya.radius_km, dunya.moons); // 1) Copy alanlar: calisir
     // println!("{}", dunya.name);                    // 2) E0382 borrow of moved value
     // yut_gezegen(dunya);                            // 3) E0382 use of partially moved value
     // .. butunu goturmez, sadece Copy olmayan alani (name) tasir.
@@ -141,11 +154,22 @@ fn main() {
     println!("Baslangic = {} bayt", size_of::<Origin>());
 
     // bellekte struct - hizalama ve padding
-    println!("(u8, u32, u8) = {} bayt (6 degil)", size_of::<(u8, u32, u8)>());
-    println!("Point = {} bayt  Meters = {} bayt", size_of::<Point>(), size_of::<Meters>());
+    println!(
+        "(u8, u32, u8) = {} bayt (6 degil)",
+        size_of::<(u8, u32, u8)>()
+    );
+    println!(
+        "Point = {} bayt  Meters = {} bayt",
+        size_of::<Point>(),
+        size_of::<Meters>()
+    );
 
     // struct'lar stack'te, Vec<Point> yapinca icerik heap'te yan yana
-    let yol = vec![Point::new(0.0, 0.0), Point::new(3.0, 4.0), Point::new(6.0, 8.0)];
+    let yol = vec![
+        Point::new(0.0, 0.0),
+        Point::new(3.0, 4.0),
+        Point::new(6.0, 8.0),
+    ];
     let mut toplam = 0.0;
     for i in 1..yol.len() {
         toplam += yol[i].distance(&yol[i - 1]);

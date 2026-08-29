@@ -22,7 +22,7 @@ fn main() {
     // insert ayni anahtara gelirse UZERINE YAZAR, eskisini dondurur
     let eski = plaka.insert(String::from("Ankara"), 61);
     println!("uzerine yazildi, eski deger: {:?}", eski);
-    plaka.insert(String::from("Ankara"), 6);            // duzeltelim
+    plaka.insert(String::from("Ankara"), 6); // duzeltelim
 
     // get Option doner - anahtarin olmamasi hata degil, normal durum
     match plaka.get("Ankara") {
@@ -30,7 +30,10 @@ fn main() {
         None => println!("kayit yok"),
     }
     println!("{:?}", plaka.get("Yok"));
-    println!("varsayilanli okuma: {}", plaka.get("Yok").copied().unwrap_or(0));
+    println!(
+        "varsayilanli okuma: {}",
+        plaka.get("Yok").copied().unwrap_or(0)
+    );
 
     // koseli parantez calisir ama anahtar yoksa PANIKLER
     println!("plaka[\"Izmir\"] = {}", plaka["Izmir"]);
@@ -38,7 +41,7 @@ fn main() {
 
     // contains_key / remove / len
     println!("contains_key(Bursa) = {}", plaka.contains_key("Bursa"));
-    let silinen = plaka.remove("Izmir");                // sahipligi geri verir
+    let silinen = plaka.remove("Izmir"); // sahipligi geri verir
     println!("remove(Izmir) -> {:?}, kalan {}", silinen, plaka.len());
 
     // get_mut ile degeri yerinde degistir
@@ -50,12 +53,16 @@ fn main() {
     // ENTRY - varsa bul, yoksa yarat
     let mut stok: HashMap<&str, i32> = HashMap::new();
     stok.insert("elma", 3);
-    *stok.entry("elma").or_insert(0) += 1;              // vardi, arttirdi
-    *stok.entry("armut").or_insert(0) += 1;             // yoktu, 0 koyup arttirdi
-    stok.entry("kiraz").or_insert_with(|| 10);          // deger sadece gerekirse uretilir
+    *stok.entry("elma").or_insert(0) += 1; // vardi, arttirdi
+    *stok.entry("armut").or_insert(0) += 1; // yoktu, 0 koyup arttirdi
+    stok.entry("kiraz").or_insert_with(|| 10); // deger sadece gerekirse uretilir
     stok.entry("elma").and_modify(|v| *v *= 2).or_insert(1);
-    println!("elma={:?} armut={:?} kiraz={:?}",
-        stok.get("elma"), stok.get("armut"), stok.get("kiraz"));
+    println!(
+        "elma={:?} armut={:?} kiraz={:?}",
+        stok.get("elma"),
+        stok.get("armut"),
+        stok.get("kiraz")
+    );
 
     // klasik ornek - kelime sayma
     let metin = "rust hizli rust guvenli rust pratik";
@@ -86,7 +93,7 @@ fn main() {
     agac.insert("armut", 1);
     agac.insert("elma", 2);
     for (k, v) in &agac {
-        print!("{}={} ", k, v);         // her zaman alfabetik
+        print!("{}={} ", k, v); // her zaman alfabetik
     }
     println!();
 
@@ -109,24 +116,31 @@ fn main() {
 
     // get odunc verir - donen referans yasarken haritayi degistiremeyiz
     let referans = sahiplik.get("anahtar");
-    println!("{:?}", referans);                         // oduncun son kullanimi
-    sahiplik.insert(String::from("yeni"), String::from("x"));   // artik serbest
+    println!("{:?}", referans); // oduncun son kullanimi
+    sahiplik.insert(String::from("yeni"), String::from("x")); // artik serbest
     println!("len={}", sahiplik.len());
 
     // HASHSET - degersiz HashMap, sadece "var mi" sorusuna cevap verir
     let mut kume = HashSet::new();
-    println!("ilk ekleme: {}", kume.insert("elma"));    // true
+    println!("ilk ekleme: {}", kume.insert("elma")); // true
     println!("ikinci ekleme: {}", kume.insert("elma")); // false - kume tekrar tutmaz
     kume.insert("armut");
-    println!("contains(elma)={} len={}", kume.contains("elma"), kume.len());
+    println!(
+        "contains(elma)={} len={}",
+        kume.contains("elma"),
+        kume.len()
+    );
 
     // KARAR: deger hic okunmuyorsa aslinda kume isteniyor demektir
     let mut sozde_harita: HashMap<&str, bool> = HashMap::new();
-    sozde_harita.insert("elma", true);      // deger hep true - bosa yer
-    println!("bu bir HashMap degil, kume: {:?}", sozde_harita.contains_key("elma"));
+    sozde_harita.insert("elma", true); // deger hep true - bosa yer
+    println!(
+        "bu bir HashMap degil, kume: {:?}",
+        sozde_harita.contains_key("elma")
+    );
 
     // insert ikisinde farkli sey dondurur
-    println!("kume.insert -> {:?}", kume.insert("kiraz"));      // bool: yeni miydi
+    println!("kume.insert -> {:?}", kume.insert("kiraz")); // bool: yeni miydi
     println!("harita.insert -> {:?}", stok.insert("elma", 99)); // Option: eski deger
 
     // kume islemleri - hepsi tembel, liste icin collect gerekir
@@ -138,7 +152,10 @@ fn main() {
     birlesim.sort();
     kesisim.sort();
     fark.sort();
-    println!("birlesim={:?} kesisim={:?} fark={:?}", birlesim, kesisim, fark);
+    println!(
+        "birlesim={:?} kesisim={:?} fark={:?}",
+        birlesim, kesisim, fark
+    );
     println!("a, b'nin alt kumesi mi: {}", a.is_subset(&b));
 
     // tekrarlari ayiklamak icin pratik yol

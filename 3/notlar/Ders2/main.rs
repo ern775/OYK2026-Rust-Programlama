@@ -40,15 +40,15 @@ fn main() {
     // let ilk = &k[0];
     // k.push(4);                       // E0502
     // println!("{}", ilk);
-    let ilk = k[0];                     // kopyaladik, odunc kalmadi
+    let ilk = k[0]; // kopyaladik, odunc kalmadi
     k.push(4);
     println!("{} {:?}", ilk, k);
 
     // NLL - odunc SON KULLANIMINDA biter, kapsam sonunda degil
     let mut n = vec![1, 2, 3];
     let oku = &n[0];
-    println!("{}", oku);                // oduncun son kullanimi burada
-    n.push(4);                          // artik serbest
+    println!("{}", oku); // oduncun son kullanimi burada
+    n.push(4); // artik serbest
     println!("{:?}", n);
 
     // ayni kod, sira degisince derlenmez
@@ -60,9 +60,9 @@ fn main() {
     buyuyen.push(1);
     buyuyen.push(2);
     println!("cap={} adres={:p}", buyuyen.capacity(), buyuyen.as_ptr());
-    buyuyen.push(3);                    // kapasite doldu, yeni yer alindi
+    buyuyen.push(3); // kapasite doldu, yeni yer alindi
     println!("cap={} adres={:p}", buyuyen.capacity(), buyuyen.as_ptr());
-    buyuyen.reserve(1_000_000);         // buyuk istek - yerinde buyutulemez
+    buyuyen.reserve(1_000_000); // buyuk istek - yerinde buyutulemez
     println!("cap={} adres={:p}", buyuyen.capacity(), buyuyen.as_ptr());
     // DIKKAT: allocator bazen yerinde buyutur ve adres AYNI kalir.
     // Ders bu: adres degisebilir, garantisi yoktur - o yuzden referans tutmak yasak.
@@ -72,10 +72,10 @@ fn main() {
     // for x in &sayilar { sayilar.push(*x); }      // E0502
     let mut eklenecek = Vec::new();
     for x in &sayilar {
-        eklenecek.push(*x * 10);        // once topla
+        eklenecek.push(*x * 10); // once topla
     }
     let mut sonuc = sayilar.clone();
-    sonuc.extend(eklenecek);            // sonra uygula
+    sonuc.extend(eklenecek); // sonra uygula
     println!("{:?}", sonuc);
 
     // bir elemani odunc almak TUMUNU kilitler
@@ -84,7 +84,7 @@ fn main() {
     *e = 10;
     // println!("{:?}", d);             // burada olmaz, e hala yasiyor
     println!("{}", e);
-    println!("{:?}", d);                // e bitti, serbest
+    println!("{:?}", d); // e bitti, serbest
 
     // iki elemani ayni anda &mut almak - split_at_mut diziyi ikiye boler
     let (sol, sag) = d.split_at_mut(2);
@@ -95,7 +95,7 @@ fn main() {
     // &mut degeri kendi de tasinabilir, kopyalanamaz
     let mut z = String::from("z");
     let birinci = &mut z;
-    let ikinci = birinci;               // &mut Copy degil, TASINDI
+    let ikinci = birinci; // &mut Copy degil, TASINDI
     ikinci.push('!');
     // println!("{}", birinci);         // E0382
     println!("{}", ikinci);
@@ -126,8 +126,11 @@ fn main() {
     // null ya da gecersiz bir referans URETILEMEZ.
     let deger = 7;
     let isaretci: &i32 = &deger;
-    println!("&i32 = {} bayt, gosterdigi deger = {}",
-        std::mem::size_of::<&i32>(), isaretci);
+    println!(
+        "&i32 = {} bayt, gosterdigi deger = {}",
+        std::mem::size_of::<&i32>(),
+        isaretci
+    );
     // let bos: &i32 = 0;               // E0308 - referansa adres atanmaz
     // let bos: &i32 = null;            // null diye bir sey YOK
 

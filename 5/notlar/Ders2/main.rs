@@ -10,8 +10,14 @@ enum TelemetryError {
     EmptyLine,
     MissingField(&'static str),
     NotANumber(String),
-    OutOfRange { field: &'static str, value: f64 },
-    AtLine { line_no: usize, source: Box<TelemetryError> },
+    OutOfRange {
+        field: &'static str,
+        value: f64,
+    },
+    AtLine {
+        line_no: usize,
+        source: Box<TelemetryError>,
+    },
 }
 
 // Display: hatanin KULLANICIYA gosterilen hali. Elle yazilir.
@@ -59,18 +65,23 @@ fn parse_long(line: &str) -> Result<f64, TelemetryError> {
 
 // ---- ? ILE: ayni is, iki satir ----
 fn parse_short(line: &str) -> Result<f64, TelemetryError> {
-    let esit = line.find('=').ok_or(TelemetryError::MissingField("sicaklik"))?;
+    let esit = line
+        .find('=')
+        .ok_or(TelemetryError::MissingField("sicaklik"))?;
     if &line[..esit] != "sicaklik" {
         return Err(TelemetryError::MissingField("sicaklik"));
     }
-    let sayi: f64 = line[esit + 1..].parse()?;   // ParseFloatError -> From -> TelemetryError
+    let sayi: f64 = line[esit + 1..].parse()?; // ParseFloatError -> From -> TelemetryError
     Ok(sayi)
 }
 
 // dogrulama ayri bir adim; ? ile zincirleniyor
 fn validate(deger: f64) -> Result<f64, TelemetryError> {
     if deger < -125.0 || deger > 20.0 {
-        return Err(TelemetryError::OutOfRange { field: "sicaklik", value: deger });
+        return Err(TelemetryError::OutOfRange {
+            field: "sicaklik",
+            value: deger,
+        });
     }
     Ok(deger)
 }
@@ -80,7 +91,7 @@ fn parse_and_validate(line: &str) -> Result<f64, TelemetryError> {
     if line.is_empty() {
         return Err(TelemetryError::EmptyLine);
     }
-    validate(parse_short(line)?)                   // ? ifadenin ortasinda da kullanilir
+    validate(parse_short(line)?) // ? ifadenin ortasinda da kullanilir
 }
 
 // ?'in yapamadigi: BAGLAM eklemek. Satir numarasini biz sarmaliyoruz.
@@ -93,7 +104,7 @@ fn process_file(icerik: &str) -> Result<Vec<f64>, TelemetryError> {
                 return Err(TelemetryError::AtLine {
                     line_no: i + 1,
                     source: Box::new(e),
-                })
+                });
             }
         }
     }
@@ -128,21 +139,25 @@ fn username(eposta: &str) -> Option<&str> {
 
 // Box<dyn Error>: "herhangi bir hata". Farkli tipler ayni kutuya girer.
 fn boxed(line: &str) -> Result<f64, Box<dyn Error>> {
-    let d = parse_and_validate(line)?;             // TelemetryError -> Box<dyn Error>
-    let _ = "12".parse::<i32>()?;                // ParseIntError  -> Box<dyn Error>
+    let d = parse_and_validate(line)?; // TelemetryError -> Box<dyn Error>
+    let _ = "12".parse::<i32>()?; // ParseIntError  -> Box<dyn Error>
     Ok(d)
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
     println!("{:<15}{:?}", "uzun yazim", parse_long("sicaklik=-63.2"));
-    println!("{:<15}{:?}", "kisa yazim (?)", parse_short("sicaklik=-63.2"));
+    println!(
+        "{:<15}{:?}",
+        "kisa yazim (?)",
+        parse_short("sicaklik=-63.2")
+    );
     println!("{:<15}{:?}", "From ile", parse_short("sicaklik=abc"));
 
     println!("---");
     for s in ["sicaklik=-63.2", "sicaklik=999", "nem=40", ""] {
         match parse_and_validate(s) {
             Ok(d) => println!("{:<16} -> {}", s, d),
-            Err(e) => println!("{:<16} -> HATA: {}", s, e),   // Display kullaniliyor
+            Err(e) => println!("{:<16} -> HATA: {}", s, e), // Display kullaniliyor
         }
     }
 
@@ -150,12 +165,21 @@ fn main() -> Result<(), Box<dyn Error>> {
     let dosya = "sicaklik=-63.2\nsicaklik=-70.0\nsicaklik=abc\nsicaklik=-10";
     match process_file(dosya) {
         Ok(v) => println!("{:?}", v),
-        Err(e) => println!("HATA: {}", e),        // "3. satir: 'abc' sayiya cevrilemedi"
+        Err(e) => println!("HATA: {}", e), // "3. satir: 'abc' sayiya cevrilemedi"
     }
 
     println!("---");
-    println!("{:<15}{:?} {:?}", "Option'da ?", username("ada@mars.gov"), username("adamars"));
-    println!("{:<15}{:?}", "Box<dyn Error>", boxed("sicaklik=999").map_err(|e| e.to_string()));
+    println!(
+        "{:<15}{:?} {:?}",
+        "Option'da ?",
+        username("ada@mars.gov"),
+        username("adamars")
+    );
+    println!(
+        "{:<15}{:?}",
+        "Box<dyn Error>",
+        boxed("sicaklik=999").map_err(|e| e.to_string())
+    );
 
     // main de Result dondurur: Err donerse cikis kodu 1 olur
     let son = parse_and_validate("sicaklik=-40")?;
